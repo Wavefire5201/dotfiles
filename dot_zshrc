@@ -1,0 +1,94 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+export ZSH="$HOME/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+plugins=(git gh docker zsh-syntax-highlighting zsh-autosuggestions zsh-history-substring-search you-should-use)
+fpath+="${ZSH_CUSTOM:-"$ZSH/custom"}/plugins/zsh-completions/src"
+source $ZSH/oh-my-zsh.sh
+
+# zsh-history-substring-search options
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+
+# environment variables
+export EDITOR="code"
+# export HSA_OVERRIDE_GFX_VERSION=11.0.0
+# export AMD_VULKAN_ICD=RADV
+# export HSA_ENABLE_SDMA=0
+# export HSA_OVERRIDE_GFX_VERSION=10.3.0
+
+
+# path
+export PATH=$PATH:$HOME/.spicetify
+# export PATH=$PATH:$HOME/go/bin
+# export PATH=$PATH:$HOME/.local/share/gem/ruby/3.3.0/bin
+export PATH="$PATH:${$(find ~/.local/bin -maxdepth 1 -type d -printf %p:)%%:}"
+
+
+# aliases
+alias cat='bat'
+alias ff='fastfetch'
+alias ls="eza --icons=auto"
+alias cd="z"
+alias dupdate="docker compose pull && docker compose up -d"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+source /usr/share/nvm/init-nvm.sh
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+# bun completions
+[ -s "/home/wavefire/.bun/_bun" ] && source "/home/wavefire/.bun/_bun"
+
+# deno
+source "/home/wavefire/.deno/env"
+
+# zoxide
+eval "$(zoxide init zsh)"
+
+# conda
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
+export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
+
+# pnpm
+export PNPM_HOME="/home/wavefire/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# uv
+eval "$(uv generate-shell-completion zsh)" # you should already have these two lines
+eval "$(uvx --generate-shell-completion zsh)"
+
+# you will need to add the lines below
+# https://github.com/astral-sh/uv/issues/8432#issuecomment-2453494736
+_uv_run_mod() {
+    if [[ "$words[2]" == "run" && "$words[CURRENT]" != -* ]]; then
+        _arguments '*:filename:_files'
+    else
+        _uv "$@"
+    fi
+}
+compdef _uv_run_mod uv
