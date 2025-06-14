@@ -137,11 +137,7 @@ class PlayerManager:
         ):
             track_info = "Advertisement"
         # Special handling for YouTube in browser
-        elif (
-            player_name in ["chromium", "firefox", "brave"]
-            and title
-            and "YouTube" in title
-        ):
+        elif player_name in ["chromium", "firefox", "brave"] and title:
             # Extract the actual video title from "Video Title - YouTube"
             if " - YouTube" in title:
                 track_info = title.replace(" - YouTube", "")

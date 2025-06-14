@@ -13,9 +13,9 @@ configuration {
 /*	on-menu-canceled: ;*/
 /*	on-menu-error: ;*/
 /*	on-screenshot-taken: ;*/
-	terminal: "kitty";
-/*	ssh-client: "ssh";*/
-/*	ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";*/
+  	terminal: "kitty";
+/* 	ssh-client: "ssh";*/
+  	ssh-command: "{terminal} kitten {ssh-client} {host} [-p {port}]";
 /*	run-command: "{cmd}";*/
 /*	run-list-command: "";*/
 /*	run-shell-command: "{terminal} -e {cmd}";*/
