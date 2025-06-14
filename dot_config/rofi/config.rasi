@@ -1,6 +1,6 @@
 configuration {
-	modes: "window,drun,run,ssh,emoji";
-	font: "SF Pro Display 16";
+  	modes: "window,drun,run,ssh,emoji";
+	  font: "SF Pro Display 16";
 /*	location: 0;*/
 /*	yoffset: 0;*/
 /*	xoffset: 0;*/
