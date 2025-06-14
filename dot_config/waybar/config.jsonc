@@ -1,159 +1,111 @@
 // -*- mode: jsonc -*-
-[
-  {
-    // main monitor waybar config
-    "layer": "top",
-    "reload_style_on_change": true,
-    "output": "DP-1",
-    "position": "bottom",
-    "height": 30,
-    // "width": 1280, // Waybar width
-    // "spacing": 4, // Gaps between modules (4px)
-    "modules-left": ["hyprland/workspaces", "mpris"],
-    "modules-center": ["hyprland/window"],
-    "modules-right": [
-      "temperature",
-      "memory",
-      "cpu",
-      "pulseaudio",
-      "clock",
-      "tray",
-      "custom/powermenu"
-    ],
-    // Modules configuration
-    "hyprland/window": {
-      "max-length": 50
+{
+  "layer": "top",
+  "reload_style_on_change": true,
+  "output": "eDP-1",
+  "position": "top",
+  "height": 30, 
+  "modules-left": ["hyprland/workspaces", "mpris"],
+  "modules-center": ["hyprland/window"],
+  "modules-right": [
+    "power-profiles-daemon",
+    "temperature",
+    "memory",
+    "cpu",
+    "backlight",
+    "pulseaudio",
+    "battery",
+    "clock",
+    "tray",
+    "custom/powermenu"
+  ],
+  // Modules configuration
+  "hyprland/window": {
+    "max-length": 50
+  },
+  "hyprland/workspaces": {
+    "all-outputs": true,
+  },
+  "tray": {
+    // "icon-size": 21,
+    "spacing": 10
+    // "icons": {
+    //   "blueman": "bluetooth",
+    //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
+    // }
+  },
+  "clock": {
+    "timezone": "America/Chicago",
+    "format": "{:%a %b %d %I:%M %p}",
+    "tooltip": false,
+    "format-alt": false
+  },
+  "cpu": {
+    "format": "C {usage}%",
+    "tooltip": false
+  },
+  "memory": {
+    "format": "{used}GB",
+    "tooltip": false
+  },
+  "temperature": {
+    "critical-threshold": 80,
+    "format": "{temperatureC}°C",
+    "format-alt": false
+  },
+  "backlight": {
+    "format": "B {percent}%{icon}",
+    "tooltip": false
+  },
+  "battery": {
+    "states": {
+      // "good": 95,
+      "warning": 30,
+      "critical": 15
     },
-    "hyprland/workspaces": {
-      // "all-outputs": true,
-      "on-scroll-up": "hyprctl dispatch workspace e+1",
-      "on-scroll-down": "hyprctl dispatch workspace e-1"
-    },
-    "idle_inhibitor": {
-      "format": "{icon}",
-      "format-icons": {
-        "activated": "",
-        "deactivated": ""
-      }
-    },
-    "tray": {
-      // "icon-size": 21,
-      "spacing": 10,
-      "icons": {
-        "blueman": "bluetooth",
-        "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-      }
-    },
-    "clock": {
-      "timezone": "America/Chicago",
-      "format": "{:%A %b %d %I:%M %p}",
-      "tooltip": false,
-      "format-alt": false
-    },
-    "cpu": {
-      "format": "C {usage}%",
-      "interval": 1,
-      "tooltip": false
-    },
-    "memory": {
-      "format": "{used}GB",
-      "tooltip": false
-    },
-    "temperature": {
-      "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon9/temp1_input",
-      "format": "{temperatureC}°C",
-      "format-alt": false,
-      "interval": 1,
-      "tooltip": false
-    },
-    "backlight": {
-      "format": "B {percent}%{icon}",
-      "tooltip": false
-    },
-    "network": {
-      // "interface": "wlp2*", // (Optional) To force the use of this interface
-      "format-wifi": "{essid} ",
-      "format-ethernet": "{ipaddr} ",
-      "tooltip-format": "{ifname} via {gwaddr} ",
-      "format-linked": "{ifname} (No IP) ",
-      "format-disconnected": "Disconnected ⚠",
-      "format-alt": "{ipaddr}"
-    },
-    "pulseaudio": {
-      "format": "V {volume}%",
-      "on-click": "pavucontrol"
-    },
-    // unused but leaving for reference
-    "custom/power": {
-      "format": "  ⏻  ",
-      "tooltip": false,
-      "menu": "on-click",
-      "menu-file": "$HOME/.config/waybar/custom_modules/power_menu.xml",
-      "menu-actions": {
-        "shutdown": "shutdown now",
-        "reboot": "reboot",
-        "suspend": "systemctl suspend",
-        "hibernate": "systemctl hibernate"
-      }
-    },
-    "custom/powermenu": {
-      "format": "  ⏻  ",
-      "tooltip": false,
-      "on-click": "wlogout"
-    },
-    "mpris": {
-      "player": "spotify",
-      "format": "{title} - {artist}",
-      "format-paused": "<i>{title} - {artist}</i>",
-      "interval": 1,
-      "tooltip": false
+    "format": "{capacity}%",
+    "format-full": "{capacity}%",
+    "format-charging": "{capacity}% ",
+    "format-plugged": "{capacity}% ",
+    "format-alt": "{time}"
+    // "format-good": "", // An empty format will hide the module
+    // "format-full": "",
+    // "format-icons": ["", "", "", "", ""],
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": ""
     }
   },
-  {
-    // second monitor waybar config
-    "layer": "top",
-    "reload_style_on_change": true,
-    "output": "DP-2",
-    "position": "bottom",
-    "height": 30,
-    "modules-left": ["hyprland/workspaces", "mpris"],
-    "modules-right": ["temperature", "memory", "cpu", "pulseaudio", "clock"],
-    "hyprland/workspaces": {
-      "on-scroll-up": "hyprctl dispatch workspace e+1",
-      "on-scroll-down": "hyprctl dispatch workspace e-1"
-    },
-    "clock": {
-      "timezone": "America/Chicago",
-      "format": "{:%A %b %d %I:%M %p}",
-      "tooltip": false,
-      "format-alt": false
-    },
-    "cpu": {
-      "format": "C {usage}%",
-      "interval": 1,
-      "tooltip": false
-    },
-    "memory": {
-      "format": "{used}GB",
-      "tooltip": false
-    },
-    "temperature": {
-      "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon9/temp1_input",
-      "format": "{temperatureC}°C",
-      "format-alt": false,
-      "interval": 1,
-      "tooltip": false
-    },
-    "pulseaudio": {
-      "format": "V {volume}%",
-      "on-click": "pavucontrol"
-    },
-    "mpris": {
-      "player": "spotify",
-      "format": "{title} - {artist}",
-      "format-paused": "<i>{title} - {artist}</i>",
-      "interval": 1,
-      "tooltip": false
-    }
-  }
-]
+  "network": {
+    // "interface": "wlp2*", // (Optional) To force the use of this interface
+    "format-wifi": "{essid} ",
+    "format-ethernet": "{ipaddr} ",
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "Disconnected ⚠",
+    "format-alt": "{ipaddr}"
+  },
+  "pulseaudio": {
+    "format": "V {volume}%",
+    "on-click": "pavucontrol"
+  },
+  "mpris": {
+    "player": "spotify",
+    "format": "{title} - {artist}",
+    "format-paused": "<i>{title} - {artist}<i>",
+    "interval": 1,
+    "tooltip": false
+  },
+  "custom/powermenu": {
+    "format": "  ⏻  ",
+    "tooltip": false,
+    "on-click": "wlogout"
+  },
+}
