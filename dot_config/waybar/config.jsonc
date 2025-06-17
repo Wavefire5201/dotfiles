@@ -4,9 +4,14 @@
   "reload_style_on_change": true,
   "output": "eDP-1",
   "position": "top",
-  "height": 30, 
-  "modules-left": ["hyprland/workspaces", "mpris"],
-  "modules-center": ["hyprland/window"],
+  "height": 30,
+  "modules-left": [
+    "hyprland/workspaces",
+    "mpris"
+  ],
+  "modules-center": [
+    "hyprland/window"
+  ],
   "modules-right": [
     "power-profiles-daemon",
     "temperature",
@@ -24,7 +29,7 @@
     "max-length": 50
   },
   "hyprland/workspaces": {
-    "all-outputs": true,
+    "all-outputs": true
   },
   "tray": {
     // "icon-size": 21,
@@ -65,12 +70,9 @@
     },
     "format": "{capacity}%",
     "format-full": "{capacity}%",
-    "format-charging": "{capacity}% ",
+    "format-charging": "{capacity}% ",
     "format-plugged": "{capacity}% ",
     "format-alt": "{time}"
-    // "format-good": "", // An empty format will hide the module
-    // "format-full": "",
-    // "format-icons": ["", "", "", "", ""],
   },
   "power-profiles-daemon": {
     "format": "{icon}",
@@ -97,7 +99,11 @@
     "on-click": "pavucontrol"
   },
   "mpris": {
-    "player": "spotify",
+    "player": [
+      "spotify",
+      "ncspot",
+      "spotiy_player"
+    ],
     "format": "{title} - {artist}",
     "format-paused": "<i>{title} - {artist}<i>",
     "interval": 1,
@@ -107,5 +113,5 @@
     "format": "  ⏻  ",
     "tooltip": false,
     "on-click": "wlogout"
-  },
+  }
 }

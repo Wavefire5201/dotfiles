@@ -27,7 +27,7 @@ bindkey '^[[B' history-substring-search-down
 # For a full list of active aliases, run `alias`.
 
 # environment variables
-export EDITOR="code"
+export EDITOR="nvim"
 # export HSA_OVERRIDE_GFX_VERSION=11.0.0
 # export AMD_VULKAN_ICD=RADV
 # export HSA_ENABLE_SDMA=0
@@ -51,8 +51,8 @@ alias dupdate="docker compose pull && docker compose up -d"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # nvm
-export NVM_DIR="$HOME/.nvm"
-source /usr/share/nvm/init-nvm.sh
+# export NVM_DIR="$HOME/.nvm"
+# source /usr/share/nvm/init-nvm.sh
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -61,7 +61,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "/home/wavefire/.bun/_bun" ] && source "/home/wavefire/.bun/_bun"
 
 # deno
-source "/home/wavefire/.deno/env"
+# source "/home/wavefire/.deno/env"
 
 # zoxide
 eval "$(zoxide init zsh)"
