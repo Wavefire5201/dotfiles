@@ -4,11 +4,11 @@ My first rice with Hyprland, going for a minimalistic style.
 
 This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi).
 
-# Showcase
+## Showcase
 
 ![A Picture of my Desktop](pictures/desktop.png)
 
-# TO-DO
+## TO-DO
 
 - Improve screenshot workflow (edit after screenshot)
 - Improve tray in waybar (bluetooth icon etc)
