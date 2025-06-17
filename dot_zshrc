@@ -27,7 +27,7 @@ bindkey '^[[B' history-substring-search-down
 # For a full list of active aliases, run `alias`.
 
 # environment variables
-export EDITOR="code"
+export EDITOR="nvim"
 # export HSA_OVERRIDE_GFX_VERSION=11.0.0
 # export AMD_VULKAN_ICD=RADV
 # export HSA_ENABLE_SDMA=0
