@@ -6,6 +6,6 @@
 # -- To learn how to make something like this yourself, check out https://sane1090x.gumroad.com/l/hypraccelerator -- #
 */
 
-@import 'matugen/colors.css';
+@import 'colors.css';
 @import 'components/notifications.css';
 @import 'components/control-center.css';

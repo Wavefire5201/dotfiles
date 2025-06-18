@@ -9,8 +9,13 @@
     "height": 30,
     // "width": 1280, // Waybar width
     // "spacing": 4, // Gaps between modules (4px)
-    "modules-left": ["hyprland/workspaces", "mpris"],
-    "modules-center": ["hyprland/window"],
+    "modules-left": [
+      "hyprland/workspaces",
+      "mpris"
+    ],
+    "modules-center": [
+      "hyprland/window"
+    ],
     "modules-right": [
       "temperature",
       "memory",
@@ -81,6 +86,7 @@
     },
     "pulseaudio": {
       "format": "V {volume}%",
+      "format-muted": "V M%",
       "on-click": "pavucontrol"
     },
     // unused but leaving for reference
@@ -116,8 +122,17 @@
     "output": "DP-2",
     "position": "bottom",
     "height": 30,
-    "modules-left": ["hyprland/workspaces", "mpris"],
-    "modules-right": ["temperature", "memory", "cpu", "pulseaudio", "clock"],
+    "modules-left": [
+      "hyprland/workspaces",
+      "mpris"
+    ],
+    "modules-right": [
+      "temperature",
+      "memory",
+      "cpu",
+      "pulseaudio",
+      "clock"
+    ],
     "hyprland/workspaces": {
       "on-scroll-up": "hyprctl dispatch workspace e+1",
       "on-scroll-down": "hyprctl dispatch workspace e-1"
