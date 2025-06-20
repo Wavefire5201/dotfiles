@@ -1,14 +1,14 @@
 // -*- mode: jsonc -*-
 [
   {
-    // main monitor waybar config
+    // Main monitor waybar config
     "layer": "top",
     "reload_style_on_change": true,
     "output": "DP-1",
     "position": "bottom",
     "height": 30,
-    // "width": 1280, // Waybar width
     // "spacing": 4, // Gaps between modules (4px)
+    // Modules
     "modules-left": [
       "hyprland/workspaces",
       "mpris"
@@ -17,13 +17,18 @@
       "hyprland/window"
     ],
     "modules-right": [
+      "group/tray",
       "temperature",
       "memory",
       "cpu",
       "pulseaudio",
       "clock",
-      "tray",
-      "custom/powermenu"
+      // "network",
+      // "bluetooth",
+      // "tray",
+      // "custom/powermenu",
+      // "group/powermenu",
+      "custom/swaync"
     ],
     // Modules configuration
     "hyprland/window": {
@@ -31,23 +36,18 @@
     },
     "hyprland/workspaces": {
       // "all-outputs": true,
-      "on-scroll-up": "hyprctl dispatch workspace e+1",
-      "on-scroll-down": "hyprctl dispatch workspace e-1"
+      // "on-scroll-up": "hyprctl dispatch workspace e+1",
+      // "on-scroll-down": "hyprctl dispatch workspace e-1"
     },
     "idle_inhibitor": {
       "format": "{icon}",
       "format-icons": {
-        "activated": "",
-        "deactivated": ""
+        "activated": " ",
+        "deactivated": " "
       }
     },
     "tray": {
-      // "icon-size": 21,
-      "spacing": 10,
-      "icons": {
-        "blueman": "bluetooth",
-        "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-      }
+      "spacing": 10
     },
     "clock": {
       "timezone": "America/Chicago",
@@ -55,6 +55,7 @@
       "tooltip": false,
       "format-alt": false
     },
+    // Hardware information
     "cpu": {
       "format": "C {usage}%",
       "interval": 1,
@@ -76,23 +77,34 @@
       "format": "B {percent}%{icon}",
       "tooltip": false
     },
+    // Connection information
     "network": {
-      "format-wifi": " ",
+      "format-wifi": "{icon}",
       "format-ethernet": "󰈀 ",
-      "tooltip-format": "{ifname} via {gwaddr} ",
-      "format-linked": "{ifname} (No IP) ",
-      "format-disconnected": "Disconnected ⚠",
-      "format-alt": "{ipaddr}"
+      "tooltip-format": "{ifname} via {gwaddr}",
+      "format-icons": [
+        "󰤟 ",
+        "󰤢 ",
+        "󰤥 ",
+        "󰤨 "
+      ],
+      "format-disconnected": "󰤭 ",
+      // "format-alt": "{ipaddr}",
+      "on-click": "kitty nmtui"
     },
+    "bluetooth": {
+      "format": "",
+      "format-disabled": "",
+      "format-connected": " {num_connections} connected",
+      "tooltip-format": "{controller_alias}\t{controller_address}",
+      "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+      "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+    },
+    // Media
     "pulseaudio": {
       "format": "V {volume}%",
       "format-muted": "V M%",
       "on-click": "pavucontrol"
-    },
-    "custom/powermenu": {
-      "format": "  ⏻  ",
-      "tooltip": false,
-      "on-click": "wlogout"
     },
     "mpris": {
       "player": [
@@ -102,13 +114,38 @@
       ],
       "format": "{title} - {artist}",
       "format-paused": "<i>{title} - {artist}</i>",
+      "format-stopped": "",
       "interval": 1,
       "tooltip": false
     },
-    "custom/swaync": {
-      "format": "",
+    // Custom modules
+    "custom/powermenu": {
+      "format": "  ⏻  ",
       "tooltip": false,
-      "on-click": "swaync-client -ts"
+      "on-click": "wlogout"
+    },
+    "custom/swaync": {
+      "format": " ",
+      "tooltip": false,
+      "on-click": "swaync-client -t -sw"
+    },
+    "custom/drawer": {
+      "format": " ",
+      "tooltip": false
+    },
+    // Groups
+    "group/tray": {
+      "orientation": "inherit",
+      "drawer": {
+        "transition-duration": 300,
+        "children-class": "tray-drawer",
+        "transition-left-to-right": false,
+        "click-to-reveal": true
+      },
+      "modules": [
+        "custom/drawer",
+        "tray"
+      ]
     }
   },
   {

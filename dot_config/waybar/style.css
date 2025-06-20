@@ -67,6 +67,8 @@ button:hover {
 }
 
 /* Common Module Styles */
+#group-tray,
+#custom-swaync,
 #clock,
 #battery,
 #cpu,
@@ -75,6 +77,7 @@ button:hover {
 #temperature,
 #backlight,
 #network,
+#bluetooth,
 #pulseaudio,
 #wireplumber,
 #custom-media,
@@ -150,7 +153,7 @@ button:hover {
 /* Hardware Modules */
 /* #backlight {
   background-color: #90b1b1;
-} */
+}
 
 #network {
     background-color: #2980b9;
@@ -159,6 +162,7 @@ button:hover {
 #network.disconnected {
     background-color: #f53c3c;
 }
+*/
 
 #pulseaudio {
     color: #ffffff;
@@ -197,24 +201,6 @@ button:hover {
 #idle_inhibitor.activated {
     background-color: #ecf0f1;
     color: #2d3436;
-}
-
-/* MPD Module */
-#mpd {
-    background-color: #66cc99;
-    color: #2a5c45;
-}
-
-#mpd.disconnected {
-    background-color: #f53c3c;
-}
-
-#mpd.stopped {
-    background-color: #90b1b1;
-}
-
-#mpd.paused {
-    background-color: #51a37a;
 }
 
 /* Input Modules */

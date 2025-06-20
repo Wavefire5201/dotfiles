@@ -32,7 +32,7 @@ export EDITOR="nvim"
 # export AMD_VULKAN_ICD=RADV
 # export HSA_ENABLE_SDMA=0
 # export HSA_OVERRIDE_GFX_VERSION=10.3.0
-
+export XDG_CONFIG_HOME="$HOME/.config/"
 
 # path
 export PATH=$PATH:$HOME/.spicetify
