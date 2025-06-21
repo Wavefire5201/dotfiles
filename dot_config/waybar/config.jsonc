@@ -107,16 +107,15 @@
       "on-click": "pavucontrol"
     },
     "mpris": {
-      "player": [
-        "spotify",
-        "ncspot",
-        "spotify_player"
-      ],
       "format": "{title} - {artist}",
       "format-paused": "<i>{title} - {artist}</i>",
       "format-stopped": "",
       "interval": 1,
-      "tooltip": false
+      "tooltip": false,
+      "ignored-players": [
+        "brave",
+        "librewolf"
+      ]
     },
     // Custom modules
     "custom/powermenu": {
@@ -167,8 +166,8 @@
       "clock"
     ],
     "hyprland/workspaces": {
-      "on-scroll-up": "hyprctl dispatch workspace e+1",
-      "on-scroll-down": "hyprctl dispatch workspace e-1"
+      // "on-scroll-up": "hyprctl dispatch workspace e+1",
+      // "on-scroll-down": "hyprctl dispatch workspace e-1"
     },
     "clock": {
       "timezone": "America/Chicago",
@@ -197,15 +196,15 @@
       "on-click": "pavucontrol"
     },
     "mpris": {
-      "player": [
-        "spotify",
-        "ncspot",
-        "spotify_player"
-      ],
       "format": "{title} - {artist}",
       "format-paused": "<i>{title} - {artist}</i>",
+      "format-stopped": "",
       "interval": 1,
-      "tooltip": false
+      "tooltip": false,
+      "ignored-players": [
+        "brave",
+        "librewolf"
+      ]
     }
   }
 ]
