@@ -50,9 +50,11 @@ alias dupdate="docker compose pull && docker compose up -d"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+{{- if eq .chezmoi.hostname "galileo" }}
 # nvm
 export NVM_DIR="$HOME/.nvm"
 source /usr/share/nvm/init-nvm.sh
+{{- end }}
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -60,8 +62,10 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # bun completions
 [ -s "/home/wavefire/.bun/_bun" ] && source "/home/wavefire/.bun/_bun"
 
+{{- if eq .chezmoi.hostname "galileo" }}
 # deno
 source "/home/wavefire/.deno/env"
+{{- end }}
 
 # zoxide
 eval "$(zoxide init zsh)"

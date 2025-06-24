@@ -1,0 +1,57 @@
+##############################
+### WINDOWS AND WORKSPACES ###
+##############################
+
+# See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
+# See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
+
+# Example windowrule
+# windowrule = float,class:^(kitty)$,title:^(kitty)$
+
+# Ignore maximize requests from apps. You'll probably like this.
+windowrule = suppressevent maximize, class:.*
+
+# Fix some dragging issues with XWayland
+windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+
+{{ if eq .chezmoi.hostname "galileo" }}
+workspace = 1, monitor:DP-1, persistent:true, default:true
+workspace = 2, monitor:DP-1, persistent:true
+workspace = 3, monitor:DP-1, persistent:true
+workspace = 4, monitor:DP-1, persistent:true
+workspace = 5, monitor:DP-1, persistent:true
+
+workspace = 6, monitor:DP-2, persistent:true
+workspace = 7, monitor:DP-2, persistent:true
+workspace = 8, monitor:DP-2, persistent:true
+workspace = 9, monitor:DP-2, persistent:true
+workspace = 10, monitor:DP-2, persistent:true
+{{ else if eq .chezmoi.hostname "zephyrus" }}
+workspace = 1, monitor:eDP-1, persistent:true, default:true
+workspace = 2, monitor:eDP-1, persistent:true
+workspace = 3, monitor:eDP-1, persistent:true
+workspace = 4, monitor:eDP-1, persistent:true
+workspace = 5, monitor:eDP-1, persistent:true
+{{ end }}
+
+windowrulev2 = float,class:(clipse) # ensure you have a floating window class set if you want this behavior
+windowrulev2 = size 622 652,class:(clipse) # set the size of the window as necessary
+
+# Make Dolphin file picker (e.g., "Save File" dialog) float
+windowrulev2 = float, class:org.freedesktop.impl.portal.desktop.kde
+windowrulev2 = size 45% 50%, class:org.freedesktop.impl.portal.desktop.kde
+windowrulev2 = center, class:org.freedesktop.impl.portal.desktop.kde
+
+# Window rules for the floating kitty terminal
+# windowrulev2 = float, class:kitty-floating
+# windowrulev2 = center, class:kitty-floating
+# windowrulev2 = size 40% 40%, class:^(kitty-floating)$
+
+windowrulev2 = float, class:^(kitty-floating)$
+windowrulev2 = center, class:^(kitty-floating)$
+windowrulev2 = size 50% 50%, class:^(kitty-floating)$
+
+# Make sure it doesn't get caught by other window rules
+windowrulev2 = tile, class:^(kitty)$,title:^(?!Floating Terminal).*$
+
+exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP

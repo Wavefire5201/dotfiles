@@ -16,9 +16,9 @@ This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi)
 - Configure swaync
 - Configure hypridle
 - ~~Configure hyprlock~~
-- Configure wlogout
-- Seperate sections in hyprland.conf into different files
-- Configure rofi
-  - rofi-emoji
+- ~~Configure wlogout~~
+- ~~Seperate sections in hyprland.conf into different files~~
+- ~~Configure rofi~~
+  - ~~rofi-emoji~~
   - rofi-calc
 - Make scripts for rofi

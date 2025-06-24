@@ -4,8 +4,13 @@
     // Main monitor waybar config
     "layer": "top",
     "reload_style_on_change": true,
+    {{- if eq .chezmoi.hostname "galileo" }}
     "output": "DP-1",
     "position": "bottom",
+    {{- else if eq .chezmoi.hostname "zephyrus" }}
+    "output": "eDP-1",
+    "position": "top",
+    {{- end }}
     "height": 30,
     // "spacing": 4, // Gaps between modules (4px)
     // Modules
@@ -21,7 +26,13 @@
       "temperature",
       "memory",
       "cpu",
+      {{- if eq .chezmoi.hostname "zephyrus" }}
+      "backlight",
+      {{- end }}
       "pulseaudio",
+      {{- if eq .chezmoi.hostname "zephyrus" }}
+      "battery",
+      {{- end }}
       "clock",
       // "network",
       // "bluetooth",
@@ -35,7 +46,9 @@
       "max-length": 50
     },
     "hyprland/workspaces": {
-      // "all-outputs": true,
+      {{- if eq .chezmoi.hostname "zephyrus" }}
+      "all-outputs": true,
+      {{- end }}
       // "on-scroll-up": "hyprctl dispatch workspace e+1",
       // "on-scroll-down": "hyprctl dispatch workspace e-1"
     },
@@ -44,6 +57,17 @@
       "format-icons": {
         "activated": " ",
         "deactivated": " "
+      }
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
       }
     },
     "tray": {
@@ -63,11 +87,13 @@
     },
     "memory": {
       "format": "{used}GB",
-      "interval": 5,
+      "interval": 1,
       "tooltip": false
     },
     "temperature": {
+      {{- if eq .chezmoi.hostname "galileo" }}
       "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon9/temp1_input",
+      {{- end }}
       "format": "{temperatureC}°C",
       "format-alt": false,
       "interval": 1,
@@ -76,6 +102,18 @@
     "backlight": {
       "format": "B {percent}%{icon}",
       "tooltip": false
+    },
+    "battery": {
+      "states": {
+        // "good": 95,
+        "warning": 30,
+        "critical": 15
+      },
+      "format": "{capacity}%",
+      "format-full": "{capacity}%",
+      "format-charging": "{capacity}% ",
+      "format-plugged": "{capacity}% ",
+      "format-alt": "{time}"
     },
     // Connection information
     "network": {
@@ -143,10 +181,14 @@
       },
       "modules": [
         "custom/drawer",
+        {{- if eq .chezmoi.hostname "zephyrus" }}
+        "power-profiles-daemon",
+        {{- end }}
         "tray"
       ]
     }
   },
+  {{- if eq .chezmoi.hostname "galileo" }}
   {
     // second monitor waybar config
     "layer": "top",
@@ -207,4 +249,5 @@
       ]
     }
   }
+  {{- end }}
 ]

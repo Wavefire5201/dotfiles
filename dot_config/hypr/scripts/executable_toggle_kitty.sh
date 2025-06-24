@@ -27,7 +27,7 @@ if [ -z "$window_id" ]; then
     hyprctl dispatch setfloating address:$window_id
     sleep 0.1
     hyprctl dispatch centerwindow address:$window_id
-    hyprctl dispatch resizewindowpixel exact 40% 40%,address:$window_id
+    hyprctl dispatch resizewindowpixel exact 50% 50%,address:$window_id
     hyprctl dispatch focuswindow address:$window_id
   fi
 else
