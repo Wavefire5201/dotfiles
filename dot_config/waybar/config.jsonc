@@ -114,7 +114,7 @@
       "tooltip": false,
       "ignored-players": [
         "brave",
-        "librewolf"
+        "firefox"
       ]
     },
     // Custom modules
@@ -203,7 +203,7 @@
       "tooltip": false,
       "ignored-players": [
         "brave",
-        "librewolf"
+        "firefox"
       ]
     }
   }
