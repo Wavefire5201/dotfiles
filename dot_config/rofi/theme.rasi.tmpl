@@ -15,7 +15,11 @@
 }
 
 window {
+  {{- if eq .chezmoi.hostname "galileo" }}
+  width: 30%;
+  {{- else if eq .chezmoi.hostname "zephyrus" }}
   width: 50%;
+  {{- end}}
   background-color: @bg;
 }
 
