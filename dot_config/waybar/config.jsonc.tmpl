@@ -96,8 +96,7 @@
       {{- end }}
       "format": "{temperatureC}°C",
       "format-alt": false,
-      "interval": 1,
-      "tooltip": false
+      "interval": 1, "tooltip": false
     },
     "backlight": {
       "format": "B {percent}%{icon}",
@@ -181,10 +180,10 @@
       },
       "modules": [
         "custom/drawer",
+        "tray",
         {{- if eq .chezmoi.hostname "zephyrus" }}
-        "power-profiles-daemon",
+        "power-profiles-daemon"
         {{- end }}
-        "tray"
       ]
     }
   },

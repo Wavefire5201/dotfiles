@@ -4,7 +4,11 @@
         FontAwesome,
         SF Pro Display,
         sans-serif;
+    {{- if eq .chezmoi.hostname "galileo" }}
     font-size: 17px;
+    {{- else if eq .chezmoi.hostname "zephyrus" }}
+    font-size: 15px;
+    {{- end }}
 }
 
 /* Waybar Window Styles */
