@@ -49,7 +49,11 @@ windowrulev2 = center, class:org.freedesktop.impl.portal.desktop.kde
 
 windowrulev2 = float, class:^(kitty-floating)$
 windowrulev2 = center, class:^(kitty-floating)$
+{{- if eq .chezmoi.hostname "galileo" }}
 windowrulev2 = size 50% 50%, class:^(kitty-floating)$
+{{- else if eq .chezmoi.hostname "zephyrus" }}
+windowrulev2 = size 70% 65%, class:^(kitty-floating)$
+{{- end }}
 
 # Make sure it doesn't get caught by other window rules
 windowrulev2 = tile, class:^(kitty)$,title:^(?!Floating Terminal).*$
