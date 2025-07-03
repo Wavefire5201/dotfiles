@@ -1,87 +1,95 @@
+// Inspired by Catnap
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "type": "auto",
+    "type": "small",
     "padding": {
-      "left": 3
+      "top": 1
     }
+  },
+  "display": {
+    "separator": " "
   },
   "modules": [
     {
-      "type": "custom",
-      "format": "\u001b[90m┌─────────────────────────────────────────────────────────┐"
+      "key": "╭────────────╮",
+      "type": "custom"
     },
     {
+      "key": "│ {#31}  user    {#keys}│",
+      "type": "title",
+      "format": "{user-name}"
+    },
+    {
+      "key": "│ {#32}󰇅  host    {#keys}│",
+      "type": "title",
+      "format": "{host-name}"
+    },
+    {
+      "key": "│ {#33}󰅐  uptime  {#keys}│",
+      "type": "uptime"
+    },
+    {
+      "key": "│ {#34}{icon}  distro  {#keys}│",
       "type": "os",
-      "key": "    OS",
-      "keyColor": "yellow"
+      "format": "{pretty-name}"
     },
     {
+      "key": "│ {#35}  kernel  {#keys}│",
       "type": "kernel",
-      "key": "    Kernel",
-      "keyColor": "yellow"
+      "format": "{release}"
     },
     {
-      "type": "packages",
-      "key": "  󰏖  Packages",
-      "keyColor": "yellow"
-    },
-    {
-      "type": "shell",
-      "key": "    Shell",
-      "keyColor": "blue"
-    },
-    {
-      "type": "terminal",
-      "key": "    Terminal",
-      "keyColor": "blue"
-    },
-    {
+      "key": "│ {#36}󰇄  wm      {#keys}│",
       "type": "wm",
-      "key": "    WM",
-      "keyColor": "blue"
+      "format": "{pretty-name}"
+    },
+    // {
+    //   "key": "│ {#31}  term    {#keys}│",
+    //   "type": "terminal",
+    //   "format": "{pretty-name}"
+    // },
+    {
+      "key": "│ {#32}  shell   {#keys}│",
+      "type": "shell",
+      "format": "{pretty-name}"
     },
     {
-      "type": "cpu",
-      "format": "{name} @ {freq-max}",
-      "key": "    CPU",
-      "keyColor": "green"
+      "key": "│ {#33}󰍛  cpu     {#keys}│",
+      "type": "cpu"
     },
     {
+      "key": "│ {#34}󰍛  gpu     {#keys}│",
       "type": "gpu",
-      "format": "{name}",
-      "key": "  󰊴  GPU",
-      "keyColor": "green"
+      "format": "{name}"
     },
     {
-      "type": "memory",
-      "key": "    Memory",
-      "keyColor": "green"
-    },
-    {
+      "key": "│ {#35}󰉉  disk    {#keys}│",
       "type": "disk",
-      "key": "  󰋊  Disk",
-      "keyColor": "green"
+      "folders": "/"
     },
     {
-      "type": "de",
-      "key": "   DE",
-      "keyColor": "blue"
+      "key": "│ {#36}  memory  {#keys}│",
+      "type": "memory"
     },
     {
       "type": "command",
-      "key": "    OS Age",
+      "key": "│ {#31}󰺗  os age  {#keys}│",
       "keyColor": "magenta",
       "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
     },
     {
-      "type": "custom",
-      "format": "\u001b[90m└─────────────────────────────────────────────────────────┘"
+      "key": "├────────────┤",
+      "type": "custom"
     },
     {
+      "key": "│ {#39}  colors  {#keys}│",
       "type": "colors",
-      "paddingLeft": 2,
       "symbol": "circle"
+    },
+    {
+      "key": "╰────────────╯",
+      "type": "custom"
     }
   ]
 }
