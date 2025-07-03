@@ -7,6 +7,7 @@ This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi)
 ## Showcase
 
 ![A Picture of my Desktop](pictures/desktop.png)
+![General showcase](pictures/showcase.png)
 ![A Picture of my hyprlock setup](pictures/hyprlock.png)
 
 ## TO-DO
