@@ -49,14 +49,19 @@ env = XDG_SESSION_TYPE,wayland
 
 # Refer to https://wiki.hyprland.org/Configuring/Variables/
 general {
-    gaps_in = 5
-    {{ if eq .chezmoi.hostname "galileo" }}
+    {{- if eq .chezmoi.hostname "galileo" }}
     gaps_out = 10, 10, 5, 10
-    {{ else if eq .chezmoi.hostname "zephyrus" }}
-    gaps_out = 5, 10, 10, 10
-    {{ end }}
+    gaps_in = 5
+    {{- else if eq .chezmoi.hostname "zephyrus" }}
+    gaps_out = 0, 0, 0, 0
+    gaps_in = 3
+    {{- end }}
 
+    {{- if eq .chezmoi.hostname "galileo" }}
     border_size = 1
+    {{- else if eq .chezmoi.hostname "zephyrus" }}
+    border_size = 0
+    {{- end }}
 
     # https://wiki.hyprland.org/Configuring/Variables/#variable-types for info about colors
     col.active_border = rgba(80ab8cee) rgba(598696ee)
