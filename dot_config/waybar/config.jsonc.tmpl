@@ -16,8 +16,11 @@
     // Modules
     "modules-left": [
       "hyprland/workspaces",
+      {{- if eq .chezmoi.hostname "galileo" }}
+      "mpris",
+      {{- end }}
       {{- if eq .chezmoi.hostname "zephyrus" }}
-      "hyprland/window"
+      "hyprland/window",
       {{- end }}
     ],
     {{- if eq .chezmoi.hostname "galileo" }}
