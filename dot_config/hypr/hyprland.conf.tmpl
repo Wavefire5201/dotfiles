@@ -10,7 +10,7 @@ source = ~/.config/hypr/keybinds.conf
 monitor = DP-1,2560x1600@165,1080x250,auto
 monitor = DP-2,1920x1080@165,0x0,auto,transform,1
 {{ else if eq .chezmoi.hostname "zephyrus" }}
-monitor = ,preferred,auto,auto
+monitor = eDP-1,2880x1800@60,auto,auto # 60hz to save battery
 {{ end }}
 
 #################
