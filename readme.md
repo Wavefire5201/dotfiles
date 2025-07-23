@@ -23,3 +23,7 @@ This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi)
   - ~~rofi-emoji~~
   - rofi-calc
 - Make scripts for rofi
+
+## Useful links and snippets
+
+[hyprland-and-ssh-agent](https://www.lorenzobettini.it/2023/09/hyprland-and-ssh-agent/)
