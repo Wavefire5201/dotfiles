@@ -10,12 +10,12 @@ This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi)
 ![General showcase](pictures/showcase.png)
 ![A Picture of my hyprlock setup](pictures/hyprlock.png)
 
-## TO-DO
+## To-Do
 
 - ~~Improve screenshot workflow (edit after screenshot)~~
 - ~~Improve tray in waybar (bluetooth icon etc)~~
 - Configure swaync
-- Configure hypridle
+- ~~Configure hypridle~~
 - ~~Configure hyprlock~~
 - ~~Configure wlogout~~
 - ~~Seperate sections in hyprland.conf into different files~~
