@@ -1,3 +1,7 @@
+if true then
+  return {}
+end
+
 return {
   "catppuccin/nvim",
   lazy = false,
@@ -48,10 +52,10 @@ return {
   -- specs = {
   --   {
   --     "akinsho/bufferline.nvim",
-  --     optional = true,
-  --     opts = function(_, opts)
-  --       if (vim.g.colors_name or ""):find("catppuccin") then
-  --         opts.highlights = require("catppuccin.groups.integrations.bufferline").get()
+  --     init = function()
+  --       local bufline = require("catppuccin.groups.integrations.bufferline")
+  --       function bufline.get()
+  --         return bufline.get_theme()
   --       end
   --     end,
   --   },
