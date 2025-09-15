@@ -11,8 +11,9 @@ source = ~/.config/hypr/keybinds.conf
 # monitor = DP-2,1920x1080@165,0x0,auto,transform,1
 monitor = ,2560x1600@165,auto,auto # single monitor setup
 {{ else if eq .chezmoi.hostname "zephyrus" }}
-monitor = eDP-1,2880x1800@120,auto,auto # 60hz to save battery
-monitor = DP-9,1920x1080,auto,auto # external tv
+monitor = eDP-1,2880x1800@60,auto,auto # 60hz to save battery
+# monitor = DP-9,preferred,auto,auto # external tv
+# monitor = DP-2,preferred,auto,1,mirror,eDP-1
 {{ end }}
 
 ## TODO: script to auto detect power cable
