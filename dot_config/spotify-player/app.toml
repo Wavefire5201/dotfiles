@@ -1,10 +1,10 @@
 theme = "Catpuccin-mocha"
-client_id = "3295e8309742437181e8bc88ea90eb46"
+client_id = "8166ec18ef904a278facb6ee006a62ac"
 client_port = 8080
 login_redirect_uri = "http://127.0.0.1:8989/login"
 playback_format = """
 {status} {track} • {artists}
-{album}
+{album} • {genres}
 {metadata}"""
 tracks_playback_limit = 50
 app_refresh_duration_in_ms = 32
