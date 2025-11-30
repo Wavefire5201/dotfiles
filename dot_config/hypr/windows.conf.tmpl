@@ -40,7 +40,11 @@ windowrulev2 = size 622 652,class:(clipse) # set the size of the window as neces
 
 # Make Dolphin file picker (e.g., "Save File" dialog) float
 windowrulev2 = float, class:org.freedesktop.impl.portal.desktop.kde
+{{ if eq .chezmoi.hostname "galileo" }}
 windowrulev2 = size 45% 50%, class:org.freedesktop.impl.portal.desktop.kde
+{{ else if eq .chezmoi.hostname "zephyrus" }}
+windowrulev2 = size 70% 65%, class:org.freedesktop.impl.portal.desktop.kde
+{{ end }}
 windowrulev2 = center, class:org.freedesktop.impl.portal.desktop.kde
 
 # Window rules for the floating kitty terminal

@@ -19,9 +19,6 @@
       {{- if eq .chezmoi.hostname "galileo" }}
       "mpris",
       {{- end }}
-      {{- if eq .chezmoi.hostname "zephyrus" }}
-      "hyprland/window",
-      {{- end }}
     ],
     {{- if eq .chezmoi.hostname "galileo" }}
     "modules-center": [
@@ -32,7 +29,9 @@
       "group/tray",
       "temperature",
       "memory",
+      {{- if eq .chezmoi.hostname "galileo" }}
       "cpu",
+      {{- end }}
       {{- if eq .chezmoi.hostname "zephyrus" }}
       "backlight",
       {{- end }}
@@ -191,9 +190,8 @@
       "modules": [
         "custom/drawer",
         "tray",
-        {{- if eq .chezmoi.hostname "galileo" }}
         "idle_inhibitor",
-        {{- else if eq .chezmoi.hostname "zephyrus" }}
+        {{- if eq .chezmoi.hostname "zephyrus" }}
         "power-profiles-daemon"
         {{- end }}
       ]
