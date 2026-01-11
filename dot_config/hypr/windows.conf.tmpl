@@ -2,17 +2,11 @@
 ### WINDOWS AND WORKSPACES ###
 ##############################
 
-# See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
-# See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
-
-# Example windowrule
-# windowrule = float,class:^(kitty)$,title:^(kitty)$
-
 # Ignore maximize requests from apps. You'll probably like this.
-windowrule = suppressevent maximize, class:.*
+windowrule = match:class .*, suppress_event maximize
 
 # Fix some dragging issues with XWayland
-windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+windowrule = match:class ^$ match:title ^$ match:xwayland 1 match:floating 1 match:fullscreen 0 match:pinned 0, no_focus 1
 
 {{ if eq .chezmoi.hostname "galileo" }}
 workspace = 1, monitor:DP-1, persistent:true, default:true
@@ -35,32 +29,29 @@ workspace = 4, monitor:eDP-1, persistent:true
 workspace = 5, monitor:eDP-1, persistent:true
 {{ end }}
 
-windowrulev2 = float,class:(clipse) # ensure you have a floating window class set if you want this behavior
-windowrulev2 = size 622 652,class:(clipse) # set the size of the window as necessary
+# clipse
+windowrule = match:class clipse, float 1 # ensure you have a floating window class set if you want this behavior
+windowrule = match:class clipse, size 622 652 # set the size of the window as necessary
 
 # Make Dolphin file picker (e.g., "Save File" dialog) float
-windowrulev2 = float, class:org.freedesktop.impl.portal.desktop.kde
+windowrule = match:class org.freedesktop.impl.portal.desktop.kde, float 1
 {{ if eq .chezmoi.hostname "galileo" }}
-windowrulev2 = size 45% 50%, class:org.freedesktop.impl.portal.desktop.kde
+windowrule = match:class org.freedesktop.impl.portal.desktop.kde, size (monitor_w*0.45) (monitor_h*0.50)
 {{ else if eq .chezmoi.hostname "zephyrus" }}
-windowrulev2 = size 70% 65%, class:org.freedesktop.impl.portal.desktop.kde
+windowrule = match:class org.freedesktop.impl.portal.desktop.kde, size (monitor_w*0.70) (monitor_h*0.65)
 {{ end }}
-windowrulev2 = center, class:org.freedesktop.impl.portal.desktop.kde
+windowrule = match:class org.freedesktop.impl.portal.desktop.kde, center 1
 
-# Window rules for the floating kitty terminal
-# windowrulev2 = float, class:kitty-floating
-# windowrulev2 = center, class:kitty-floating
-# windowrulev2 = size 40% 40%, class:^(kitty-floating)$
-
-windowrulev2 = float, class:^(kitty-floating)$
-windowrulev2 = center, class:^(kitty-floating)$
+# floating kitty
+windowrule = match:class ^(kitty-floating)$, float 1
+windowrule = match:class ^(kitty-floating)$, center 1
 {{- if eq .chezmoi.hostname "galileo" }}
-windowrulev2 = size 50% 50%, class:^(kitty-floating)$
+windowrule = match:class ^(kitty-floating)$, size (monitor_w*0.50) (monitor_h*0.50)
 {{- else if eq .chezmoi.hostname "zephyrus" }}
-windowrulev2 = size 70% 65%, class:^(kitty-floating)$
+windowrule = match:class ^(kitty-floating)$, size (monitor_w*0.70) (monitor_h*0.65)
 {{- end }}
 
 # Make sure it doesn't get caught by other window rules
-windowrulev2 = tile, class:^(kitty)$,title:^(?!Floating Terminal).*$
+windowrule = match:class ^(kitty)$ match:title ^(?!Floating Terminal).*$, tile true
 
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
