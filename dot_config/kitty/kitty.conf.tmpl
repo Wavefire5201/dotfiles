@@ -1,0 +1,19 @@
+# Fonts
+font_family            family="JetBrainsMono Nerd Font"
+bold_font              auto
+italic_font            auto
+bold_italic_font       auto
+# was declared twice (14 then 12); the last wins, so you were effectively on 12.
+# kept 12 to preserve current behavior — bump to 14 if you wanted the larger size.
+font_size              12
+
+# Theme
+# include Catppuccin-Mocha.conf
+include Everforest-Dark-Medium.conf
+background_opacity     0.9
+
+enable_audio_bell      no
+placement_strategy     top
+
+# Allow OSC 52 clipboard read/write without prompting (used by nvim's OSC 52 provider)
+clipboard_control      write-clipboard write-primary read-clipboard read-primary no-append

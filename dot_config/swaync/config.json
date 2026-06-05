@@ -15,20 +15,16 @@
   "notification-body-image-width": 200,
   "timeout": 4,
   "timeout-low": 2,
-  "timeout-critical": 6,
+  "timeout-critical": 0,
   "fit-to-screen": true,
   "keyboard-shortcuts": true,
   "image-visibility": "when-available",
+  "notification-grouping": false,
   "transition-time": 100,
   "hide-on-clear": false,
   "hide-on-action": false,
   "script-fail-notify": true,
-  "scripts": {
-    "example-script": {
-      "exec": "echo 'Do something...'",
-      "urgency": "Normal"
-    }
-  },
+  "scripts": {},
   "notification-visibility": {
     "spotify": {
       "state": "enabled",
@@ -60,7 +56,8 @@
     },
     "mpris": {
       "image-size": 96,
-      "image-radius": 12
+      "image-radius": 12,
+      "blacklist": ["playerctld"]
     },
     "volume": {
       "label": "󰕾 ",
@@ -87,29 +84,16 @@
           "command": "blueman-manager"
         },
         {
-          "label": "",
-          "command": "nwg-look"
-        },
-        {
-          "label": "󰻂",
-          "command": "obs"
-        },
-        {
           "label": "󰌾",
           "command": "hyprlock"
         },
         {
           "label": "󰜉",
-          "command": "reboot"
+          "command": "zenity --question --title=Reboot --text='Reboot the system now?' --width=300 --no-wrap && reboot"
         },
         {
           "label": "󰐥",
-          "command": "shutdown now"
-        },
-        {
-          "label": "󰀝",
-          "command": "bash -c $HOME/.config/hypr/scripts/airplaneMode.sh",
-          "type": "toggle"
+          "command": "zenity --question --title=Shutdown --text='Shut down the system now?' --width=300 --no-wrap && shutdown now"
         }
       ]
     }

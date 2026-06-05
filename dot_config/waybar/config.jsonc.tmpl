@@ -27,10 +27,10 @@
     {{- end }}
     "modules-right": [
       "group/tray",
-      "temperature",
+      // "temperature",
       "memory",
       {{- if eq .chezmoi.hostname "galileo" }}
-      "cpu",
+      // "cpu",
       {{- end }}
       {{- if eq .chezmoi.hostname "zephyrus" }}
       "backlight",
@@ -99,7 +99,8 @@
     },
     "temperature": {
       {{- if eq .chezmoi.hostname "galileo" }}
-      "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon9/temp1_input",
+      "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+      "input-filename": "temp1_input",
       {{- end }}
       "format": "{temperatureC}°C",
       "format-alt": false,
@@ -210,9 +211,9 @@
       "mpris"
     ],
     "modules-right": [
-      "temperature",
+      // "temperature",
       "memory",
-      "cpu",
+      // "cpu",
       "pulseaudio",
       "clock"
     ],
@@ -236,7 +237,8 @@
       "tooltip": false
     },
     "temperature": {
-      "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon9/temp1_input",
+      "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+      "input-filename": "temp1_input",
       "format": "{temperatureC}°C",
       "format-alt": false,
       "interval": 1,

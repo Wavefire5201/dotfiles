@@ -1,7 +1,9 @@
 {
   "extras": [
     "lazyvim.plugins.extras.coding.yanky",
+    "lazyvim.plugins.extras.editor.dial",
     "lazyvim.plugins.extras.editor.mini-files",
+    "lazyvim.plugins.extras.formatting.biome",
     "lazyvim.plugins.extras.lang.astro",
     "lazyvim.plugins.extras.lang.clangd",
     "lazyvim.plugins.extras.lang.cmake",
@@ -20,12 +22,13 @@
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.lang.yaml",
     "lazyvim.plugins.extras.util.chezmoi",
+    "lazyvim.plugins.extras.util.dot",
     "lazyvim.plugins.extras.util.gitui",
     "lazyvim.plugins.extras.util.mini-hipatterns"
   ],
   "install_version": 8,
   "news": {
-    "NEWS.md": "10960"
+    "NEWS.md": "11866"
   },
   "version": 8
 }

@@ -33,14 +33,15 @@ export EDITOR="nvim"
 # export AMD_VULKAN_ICD=RADV
 # export HSA_ENABLE_SDMA=0
 # export HSA_OVERRIDE_GFX_VERSION=10.3.0
-export XDG_CONFIG_HOME="$HOME/.config/"
+export XDG_CONFIG_HOME="$HOME/.config"
 export ANDROID_HOME="$HOME/Android/Sdk/"
 
 # path
 export PATH=$PATH:$HOME/.spicetify
 # adds ~/.local/bin and subfolders to $PATH
 export PATH="$PATH:${$(find ~/.local/bin -maxdepth 1 -type d -printf %p:)%%:}"
-
+export PATH="/home/wavefire/.nvm/versions/node/v22.17.0/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
 
 # aliases
 alias cat='bat'
@@ -65,9 +66,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # deno
 source "/home/wavefire/.deno/env"
 
-# zoxide
-eval "$(zoxide init zsh)"
-
 # uv
 eval "$(uv generate-shell-completion zsh)" # you should already have these two lines
 eval "$(uvx --generate-shell-completion zsh)"
@@ -82,3 +80,18 @@ _uv_run_mod() {
     fi
 }
 compdef _uv_run_mod uv
+
+# OpenClaw Completion
+source "/home/wavefire/.openclaw/completions/openclaw.zsh"
+
+# zoxide
+eval "$(zoxide init zsh)"
+# Claude Code's Bash tool resets shell CWD between commands, which trips
+# zoxide's doctor as a false positive. No-op it inside Claude Code.
+if [[ -n "$CLAUDECODE" ]]; then
+    __zoxide_doctor() { return 0; }
+fi
+
+# ssh-agent: point shells at the systemd user ssh-agent.service socket so a key
+# loaded once (or auto-added via AddKeysToAgent) is shared across all terminals.
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"

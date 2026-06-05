@@ -1,3 +1,550 @@
-@import 'mocha.css';
-/* @import 'components/notifications.css'; */
-/* @import 'components/control-center.css'; */
+/* liquid glass — cool neutral
+ * real blur is provided by hyprland layerrule (xray on swaync-control-center).
+ * CSS supplies translucent fills, rim light, soft shadows.
+ */
+
+:root {
+  /* glass surfaces (alpha lets the hypr blur show through) */
+  --glass-bg:        rgba(20, 22, 30, 0.55);
+  --glass-bg-soft:   rgba(255, 255, 255, 0.04);
+  --glass-bg-hover:  rgba(255, 255, 255, 0.08);
+  --glass-bg-active: rgba(137, 180, 250, 0.22);
+
+  /* rim light + outer shadow = the "glass" cue */
+  --rim:             rgba(255, 255, 255, 0.08);
+  --rim-bright:      rgba(255, 255, 255, 0.14);
+  --highlight-top:   rgba(255, 255, 255, 0.06);
+  --shadow-soft:     0 3px 12px rgba(0, 0, 0, 0.28);
+  --shadow-card:     0 2px 12px rgba(0, 0, 0, 0.25);
+
+  /* catppuccin-aligned text + accents */
+  --text:            rgba(205, 214, 244, 0.95);
+  --text-dim:        rgba(186, 194, 222, 0.65);
+  --accent:          #89b4fa;
+  --accent-warm:     #74c7ec;
+  --critical:        #f38ba8;
+  --backlight:       #f9e2af;
+
+  /* shape + motion */
+  --radius-panel:    18px;
+  --radius-card:     14px;
+  --radius-chip:     10px;
+  --ease:            cubic-bezier(0.4, 0, 0.2, 1);
+  --dur:             220ms;
+}
+
+* {
+  all: unset;
+  font-size: 14px;
+  font-family: "SF Pro Display", "JetBrainsMono Nerd Font Propo", "Symbols Nerd Font";
+  transition: var(--dur) var(--ease);
+}
+
+/* ── sliders (volume, brightness, mpris) ───────────────────────────── */
+scale trough {
+  margin: 0 0.25rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  min-height: 6px;
+  min-width: 70px;
+}
+
+trough highlight,
+slider {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* ── floating popup notifications ──────────────────────────────────── */
+.floating-notifications.background .notification-row .notification-background {
+  background-color: var(--glass-bg);
+  border-radius: var(--radius-card);
+  margin: 14px;
+  padding: 0;
+  color: var(--text);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 0 0 1px var(--rim),
+    inset 0 1px 0 var(--highlight-top);
+}
+
+.floating-notifications.background .notification-row .notification-background .notification {
+  padding: 8px;
+  border-radius: var(--radius-card);
+}
+
+.floating-notifications.background .notification-row .notification-background .notification.critical {
+  box-shadow: inset 0 0 0 1px rgba(243, 139, 168, 0.35);
+}
+
+.floating-notifications.background .notification-row .notification-background .notification .notification-content {
+  margin: 8px;
+}
+
+.floating-notifications.background .notification-row .notification-background .notification .notification-content .summary {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.floating-notifications.background .notification-row .notification-background .notification .notification-content .time {
+  color: var(--text-dim);
+  font-size: 0.85em;
+}
+
+.floating-notifications.background .notification-row .notification-background .notification .notification-content .body {
+  color: var(--text);
+}
+
+.floating-notifications.background .notification-row .notification-background .notification > *:last-child > * {
+  min-height: 3.4em;
+}
+
+.floating-notifications.background .notification-row .notification-background .notification > *:last-child > * .notification-action {
+  margin: 7px;
+  padding: 6px 10px;
+  border-radius: var(--radius-chip);
+  color: var(--text);
+  background-color: var(--glass-bg-soft);
+  box-shadow: inset 0 0 0 1px var(--rim);
+}
+
+.floating-notifications.background .notification-row .notification-background .notification > *:last-child > * .notification-action:hover {
+  background-color: var(--glass-bg-hover);
+  box-shadow: inset 0 0 0 1px var(--rim-bright);
+}
+
+.floating-notifications.background .notification-row .notification-background .notification > *:last-child > * .notification-action:active {
+  background-color: var(--glass-bg-active);
+  color: var(--text);
+}
+
+/* (floating-popup close button styled by the generic .close-button rules below) */
+
+/* ── control center panel ──────────────────────────────────────────── */
+.control-center {
+  background-color: var(--glass-bg);
+  border-radius: var(--radius-panel);
+  margin: 16px;
+  padding: 16px;
+  color: var(--text);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 0 0 1px var(--rim),
+    inset 0 1px 0 var(--highlight-top);
+}
+
+.control-center .widget-title {
+  margin: 8px 4px 10px 4px;
+}
+
+.control-center .widget-title > label {
+  color: var(--text);
+  font-size: 1.35em;
+  font-weight: 600;
+}
+
+.control-center .widget-title button {
+  padding: 2px 10px;
+  min-height: 22px;
+  border-radius: 8px;
+  color: var(--text-dim);
+  background-color: var(--glass-bg-soft);
+  box-shadow: inset 0 0 0 1px var(--rim);
+}
+
+.control-center .widget-title button:hover {
+  background-color: var(--glass-bg-hover);
+  box-shadow: inset 0 0 0 1px var(--rim-bright);
+}
+
+.control-center .widget-title button:active {
+  background-color: var(--glass-bg-active);
+}
+
+/* ── cards inside the control center ───────────────────────────────── */
+.control-center .notification-row .notification-background {
+  margin-top: 10px;
+  border-radius: var(--radius-card);
+  color: var(--text);
+  background-color: var(--glass-bg-soft);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px var(--rim),
+    inset 0 1px 0 var(--highlight-top);
+}
+
+.control-center .notification-row .notification-background .notification {
+  padding: 8px;
+  border-radius: var(--radius-card);
+}
+
+.control-center .notification-row .notification-background .notification.critical {
+  box-shadow: inset 0 0 0 1px rgba(243, 139, 168, 0.35);
+}
+
+.control-center .notification-row .notification-background .notification .notification-content {
+  margin: 8px;
+}
+
+.control-center .notification-row .notification-background .notification .notification-content .summary {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.control-center .notification-row .notification-background .notification .notification-content .time {
+  color: var(--text-dim);
+  font-size: 0.85em;
+}
+
+.control-center .notification-row .notification-background .notification .notification-content .body {
+  color: var(--text);
+}
+
+.control-center .notification-row .notification-background .notification > *:last-child > * {
+  min-height: 3.4em;
+}
+
+.control-center .notification-row .notification-background .notification > *:last-child > * .notification-action {
+  margin: 7px;
+  padding: 6px 10px;
+  border-radius: var(--radius-chip);
+  color: var(--text);
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 0 0 1px var(--rim);
+}
+
+.control-center .notification-row .notification-background .notification > *:last-child > * .notification-action:hover {
+  background-color: var(--glass-bg-hover);
+  box-shadow: inset 0 0 0 1px var(--rim-bright);
+}
+
+.control-center .notification-row .notification-background .notification > *:last-child > * .notification-action:active {
+  background-color: var(--glass-bg-active);
+  color: var(--text);
+}
+
+/* (control-center close button styled by the generic .close-button rules below) */
+
+/* ── close (X) button — both control-center and floating popups ────── */
+/* swaync's default close-button is a bright red circle that visually
+ * overlaps the timestamp. flatten it into a small glass chip that only
+ * lights up red on hover. matches the rest of the panel language. */
+/* swaync's NotificationCloseButton is a Box wrapping a Revealer wrapping
+ * the actual GtkButton. Style the inner button directly so the visible
+ * pill is what gets the glass treatment. */
+.close-button,
+.close-button > revealer,
+.close-button > revealer > button,
+.close-button button {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 4px;
+  min-width: 22px;
+  min-height: 22px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  border: none;
+  text-shadow: none;
+  margin: 0;
+}
+
+.close-button {
+  margin: 6px;
+}
+
+.close-button:hover,
+.close-button > revealer > button:hover,
+.close-button button:hover {
+  background-color: rgba(243, 139, 168, 0.28);
+  color: var(--critical);
+  box-shadow: inset 0 0 0 1px rgba(243, 139, 168, 0.5);
+}
+
+.close-button:hover,
+.notification-background .close-button:hover,
+.notification-row .close-button:hover {
+  background-color: rgba(243, 139, 168, 0.22);
+  color: var(--critical);
+  box-shadow: inset 0 0 0 1px rgba(243, 139, 168, 0.45);
+}
+
+.close-button:active,
+.notification-background .close-button:active,
+.notification-row .close-button:active {
+  background-color: rgba(243, 139, 168, 0.32);
+  color: var(--critical);
+}
+
+.control-center .notification-row .notification-background:hover {
+  background-color: var(--glass-bg-hover);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px var(--rim-bright),
+    inset 0 1px 0 var(--highlight-top);
+}
+
+.control-center .notification-row .notification-background:active {
+  background-color: var(--glass-bg-active);
+}
+
+/* ── urgency progress bars ─────────────────────────────────────────── */
+.notification.critical progress {
+  background-color: var(--critical);
+}
+
+.notification.low progress,
+.notification.normal progress {
+  background-color: var(--accent);
+}
+
+/* ── do-not-disturb switch ─────────────────────────────────────────── */
+.control-center-dnd,
+.widget-dnd > switch {
+  margin-top: 4px;
+  border-radius: var(--radius-chip);
+  background: var(--glass-bg-soft);
+  box-shadow: inset 0 0 0 1px var(--rim);
+  border: none;
+}
+
+.control-center-dnd:checked,
+.widget-dnd > switch:checked {
+  background: var(--glass-bg-active);
+  box-shadow: inset 0 0 0 1px rgba(137, 180, 250, 0.45);
+}
+
+.control-center-dnd slider {
+  background: var(--text-dim);
+  border-radius: 999px;
+}
+
+.widget-dnd > switch slider {
+  background: var(--text);
+  border-radius: 999px;
+  border: none;
+}
+
+.widget-dnd {
+  margin: 14px 4px 6px 4px;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.widget-dnd > switch {
+  font-size: initial;
+  min-width: 44px;
+  min-height: 24px;
+  padding: 2px;
+}
+
+/* ── mpris (media player) ──────────────────────────────────────────── */
+.widget-mpris {
+  margin: 6px 0;
+}
+
+.widget-mpris .widget-mpris-player {
+  border-radius: var(--radius-card);
+  padding: 0;
+  margin: 4px;
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px var(--rim),
+    inset 0 1px 0 var(--highlight-top);
+}
+
+/* the album art is rendered as the *background* picture under the overlay.
+ * darken it slightly so foreground text/controls are always legible. */
+.widget-mpris .mpris-background {
+  opacity: 0.85;
+}
+
+/* scrim over the album art: gradient that's darker at top/bottom (where
+ * title + controls sit) and softer in the middle. */
+.widget-mpris .mpris-overlay {
+  padding: 12px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.25) 45%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  border-radius: var(--radius-card);
+}
+
+.widget-mpris .widget-mpris-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+.widget-mpris .widget-mpris-subtitle {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* control buttons get a translucent chip backdrop so they read on bright art */
+.widget-mpris button.image-button,
+.widget-mpris button.circular {
+  background: rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  border-radius: 999px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 4px;
+  margin: 0 2px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.widget-mpris button.image-button:hover,
+.widget-mpris button.circular:hover {
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+/* fallback tile when no album art (audio-x-generic-symbolic shows up).
+ * keep a soft glass square so the layout doesn't collapse. */
+.widget-mpris .widget-mpris-album-art {
+  background: var(--glass-bg-soft);
+  border-radius: var(--radius-chip);
+  box-shadow: inset 0 0 0 1px var(--rim);
+  min-width: 96px;
+  min-height: 96px;
+}
+
+/* ── menubar / power / screenshot rows ─────────────────────────────── */
+.widget-menubar > box > .menu-button-bar > button > label {
+  font-size: 2.4rem;
+  padding: 0.4rem 1.6rem;
+}
+
+.widget-menubar > box > .menu-button-bar > :last-child {
+  color: var(--critical);
+}
+
+.power-buttons button:hover,
+.powermode-buttons button:hover,
+.screenshot-buttons button:hover {
+  background: var(--glass-bg-hover);
+  border-radius: var(--radius-chip);
+}
+
+/* ── label (Notification Center title) ─────────────────────────────── */
+.control-center .widget-label > label {
+  color: var(--text);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* ── buttons grid (the quick-action row) ───────────────────────────── */
+.widget-buttons-grid {
+  padding: 0.5rem 0;
+}
+
+.widget-buttons-grid > flowbox {
+  /* gap between cells (GTK flowbox uses row/column-spacing) */
+}
+
+.widget-buttons-grid > flowbox > flowboxchild {
+  margin: 4px;
+  padding: 0;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  padding: 10px 12px;
+  min-width: 38px;
+  min-height: 38px;
+  border-radius: var(--radius-chip);
+  background: var(--glass-bg-soft);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--rim);
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button label {
+  font-size: 1.35rem;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: inset 0 0 0 1px var(--rim-bright);
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked,
+.widget-buttons-grid > flowbox > flowboxchild > button:active {
+  background: var(--glass-bg-active);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(137, 180, 250, 0.5);
+}
+
+/* ── volume + backlight rows ───────────────────────────────────────── */
+.widget-volume {
+  margin: 10px 4px;
+  padding: 8px 14px;
+  background: var(--glass-bg-soft);
+  border-radius: var(--radius-card);
+  box-shadow:
+    inset 0 0 0 1px var(--rim),
+    inset 0 1px 0 var(--highlight-top);
+}
+
+.widget-volume label {
+  font-size: 1.3rem;
+  color: var(--accent-warm);
+  margin: 0 4px 0 0;
+  padding: 0;
+  min-height: 24px;
+}
+
+.widget-volume scale {
+  margin: 0;
+}
+
+.widget-volume trough highlight {
+  background: var(--accent-warm);
+}
+
+.widget-backlight trough highlight {
+  background: var(--backlight);
+}
+
+.widget-backlight label {
+  font-size: 1.3rem;
+  color: var(--backlight);
+}
+
+.widget-backlight .KB {
+  padding-bottom: 0.75rem;
+}
+
+/* ── notification body image ───────────────────────────────────────── */
+.image {
+  margin-right: 10px;
+  border-radius: var(--radius-chip);
+}
+
+/* ── empty-state placeholder ("No Notifications") ──────────────────── */
+/* the placeholder GtkBox stacks a 96px GtkImage on top of the label.
+ * the icon SVG is intentionally transparent, but GTK still reserves the
+ * 96px vertical slot (pixel-size is a widget property, not a CSS one).
+ * pull the label up by half that slot so the text reads as truly centered. */
+.control-center-list-placeholder {
+  padding: 0;
+}
+
+.control-center-list-placeholder image {
+  min-width: 0;
+  min-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.control-center-list-placeholder label {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  opacity: 0.7;
+  margin-top: -54px;
+}

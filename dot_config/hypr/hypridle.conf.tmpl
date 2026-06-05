@@ -8,10 +8,11 @@ listener {
     timeout = 150                                # 2.5min
     {{ if eq .chezmoi.hostname "zephyrus" }}
     on-timeout = brightnessctl -s set 39900      # set monitor backlight to 10% brightness
-    {{ else if eq .chezmoi.hostname "galileo" }}
-    on-timeout = brightnessctl -s set 10
-    {{ end }}
     on-resume = brightnessctl -r                 # monitor backlight restore.
+    {{ else if eq .chezmoi.hostname "galileo" }}
+    on-timeout = ~/.config/hypr/scripts/dim-monitors.sh      # dim both external monitors via DDC
+    on-resume = ~/.config/hypr/scripts/restore-monitors.sh   # restore saved brightness
+    {{ end }}
 }
 
 listener {

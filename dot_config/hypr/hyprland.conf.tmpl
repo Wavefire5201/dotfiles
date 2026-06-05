@@ -7,9 +7,9 @@ source = ~/.config/hypr/keybinds.conf
 
 # See https://wiki.hyprland.org/Configuring/Monitors/
 {{ if eq .chezmoi.hostname "galileo" }}
-# monitor = DP-1,2560x1600@165,1080x250,auto
-# monitor = DP-2,1920x1080@165,0x0,auto,transform,1
-monitor = ,2560x1600@165,auto,auto # single monitor setup
+monitor = DP-1,2560x1440@165,1080x250,auto
+# monitor = HDMI-A-1,1920x1080@144,0x0,auto,transform,1
+# monitor = DP-1,2560x1440@165,auto,auto # single monitor setup
 {{ else if eq .chezmoi.hostname "zephyrus" }}
 monitor = eDP-1,2880x1800@120,240x1080,2 # 60hz to save battery
 # monitor = DP-2,1920x1080@144,0x0,auto # second monitor
@@ -33,15 +33,17 @@ exec-once = nm-applet & blueman-applet & waybar & swaync & hypridle & playerctld
 exec-once = clipse -listen
 exec-once = waypaper --restore
 exec-once = udiskie
+exec-once = vicinae server
 
 #############################
 ### ENVIRONMENT VARIABLES ###
 #############################
 
 # See https://wiki.hyprland.org/Configuring/Environment-variables/
-# env = XCURSOR_SIZE,24
-# env = HYPRCURSOR_SIZE,24
-# env = HYPRCURSOR_THEME,rose-pine-hyprcursor
+env = XCURSOR_THEME,macOS
+env = XCURSOR_SIZE,24
+env = HYPRCURSOR_THEME,macOS-hyprcursor
+env = HYPRCURSOR_SIZE,24
 env = QT_QPA_PLATFORM,wayland;xcb
 env = QT_QPA_PLATFORMTHEME,kde
 env = ELECTRON_OZONE_PLATFORM_HINT,wayland
@@ -81,6 +83,11 @@ general {
 
     # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
     allow_tearing = false
+
+    # snap floating windows to screen edges and each other (you float a lot of dialogs)
+    snap {
+        enabled = true
+    }
 
     layout = dwindle
 }
@@ -152,7 +159,8 @@ animations {
 
 # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
 dwindle {
-    pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+    # pseudotile option removed in Hyprland 0.55 (was a no-op); use the `pseudo`
+    # dispatcher per-window instead (bound to mainMod + P in keybinds.conf)
     preserve_split = true # You probably want this
 }
 
@@ -167,6 +175,18 @@ misc {
     disable_hyprland_logo = true # If true disables the random hyprland logo / anime girl background. :(
     mouse_move_enables_dpms = true
     key_press_enables_dpms = true
+    vrr = 3 # adaptive sync: 0 off, 1 always, 2 any fullscreen, 3 fullscreen game/video (safest for VA panels)
+}
+
+# https://wiki.hyprland.org/Configuring/Variables/#render
+render {
+    direct_scanout = 2 # auto: bypass compositing for fullscreen game content (lower latency)
+}
+
+# https://wiki.hyprland.org/Configuring/Variables/#ecosystem
+ecosystem {
+    no_update_news = true  # updates are handled by pacman; silence the in-compositor news popup
+    no_donation_nag = true
 }
 
 
