@@ -24,6 +24,10 @@ button {
     box-shadow: inset 0 -3px transparent;
     border: none;
     border-radius: 0;
+    /* reset metrics injected by the system GTK theme so waybar stays compact */
+    min-width: 0;
+    margin: 0;
+    padding: 0;
     transition: all 0.3s ease;
 }
 
@@ -35,6 +39,8 @@ button:hover {
 /* Workspace Buttons */
 #workspaces button {
     padding: 0 5px;
+    margin: 0;
+    min-width: 0;
     background-color: transparent;
     color: #686363;
 }

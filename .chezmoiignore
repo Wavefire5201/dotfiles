@@ -1,0 +1,5 @@
+# Repo-presentation files — these live in the dotfiles repo for GitHub,
+# they are NOT meant to be applied into $HOME.
+readme.md
+pictures
+pictures/**

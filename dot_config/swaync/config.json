@@ -89,11 +89,11 @@
         },
         {
           "label": "󰜉",
-          "command": "zenity --question --title=Reboot --text='Reboot the system now?' --width=300 --no-wrap && reboot"
+          "command": "~/.config/hypr/scripts/confirm.sh 'Reboot the system now?' 'systemctl reboot'"
         },
         {
           "label": "󰐥",
-          "command": "zenity --question --title=Shutdown --text='Shut down the system now?' --width=300 --no-wrap && shutdown now"
+          "command": "~/.config/hypr/scripts/confirm.sh 'Shut down the system now?' 'systemctl poweroff'"
         }
       ]
     }

@@ -14,7 +14,7 @@ This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi)
 
 - ~~Improve screenshot workflow (edit after screenshot)~~
 - ~~Improve tray in waybar (bluetooth icon etc)~~
-- Configure swaync
+- ~~Configure swaync~~
 - ~~Configure hypridle~~
 - ~~Configure hyprlock~~
 - ~~Configure wlogout~~

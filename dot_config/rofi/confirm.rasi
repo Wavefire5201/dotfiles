@@ -1,0 +1,88 @@
+/*
+ * Compact centered Yes/No confirmation dialog.
+ * Everforest Dark Medium palette (matches kitty / tmux / nvim).
+ * Used by ~/.config/hypr/scripts/confirm.sh (power menu, etc.).
+ */
+* {
+  bg:       #272e33;  /* bg0 (hard) */
+  bg-alt:   #374145;  /* bg2 (hard) */
+  fg:       #d3c6aa;
+  fg-dim:   #859289;  /* grey1 */
+  accent:   #83a35e;  /* forest */
+  danger:   #e67e80;  /* red — destructive confirm */
+  border:   0;
+  margin:   0;
+  padding:  0;
+  spacing:  0;
+}
+
+window {
+  width:            380px;
+  border:           2px;
+  border-color:     @accent;
+  border-radius:    16px;
+  background-color: @bg;
+  padding:          0;
+}
+
+mainbox {
+  children:         [ message, listview ];
+  background-color: @bg;
+  padding:          0;
+  spacing:          0;
+}
+
+message {
+  background-color: @bg;
+  padding:          26px 22px 18px 22px;
+}
+
+textbox {
+  background-color: @bg;
+  text-color:       @fg;
+  horizontal-align: 0.5;
+  font:             "SF Pro Display Semibold 14";
+}
+
+listview {
+  columns:          2;
+  lines:            1;
+  fixed-height:     true;
+  background-color: @bg;
+  padding:          0px 18px 22px 18px;
+  spacing:          12px;
+  scrollbar:        false;
+}
+
+scrollbar { handle-width: 0px; width: 0px; }
+
+element {
+  border-radius:    10px;
+  padding:          13px 0px;
+  background-color: @bg-alt;
+  text-color:       @fg;
+  children:         [ element-text ];
+}
+
+element-icon {
+  enabled: false;
+  size:    0;
+}
+
+element-text {
+  background-color: transparent;
+  text-color:       inherit;
+  horizontal-align: 0.5;
+  vertical-align:   0.5;
+  font:             "SF Pro Display 13";
+}
+
+element selected {
+  background-color: @accent;
+  text-color:       @bg;
+}
+
+element selected.urgent {
+  background-color: @danger;
+  text-color:       @bg;
+}
