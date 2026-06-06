@@ -28,6 +28,7 @@
     "modules-right": [
       "group/tray",
       "privacy",
+      "custom/micmute",
       // "temperature",
       "memory",
       {{- if eq .chezmoi.hostname "galileo" }}
@@ -82,19 +83,20 @@
       "spacing": 10
     },
     "privacy": {
+      "tooltip": false,
       "icon-size": 14,
       "icon-spacing": 6,
       "transition-duration": 200,
       "modules": [
-        { "type": "screenshare" },
-        { "type": "audio-in" },
-        { "type": "audio-out" }
-      ],
-      "ignore": [
-        { "type": "audio-in", "name": "gsr-default_input" },
-        { "type": "audio-in", "name": "gsr-default_output" },
-        { "type": "audio-in", "name": "gpu-screen-recorder" }
+        { "type": "screenshare" }
       ]
+    },
+    "custom/micmute": {
+      "exec": "~/.config/hypr/scripts/micstatus.sh",
+      "return-type": "json",
+      "interval": 2,
+      "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+      "format": "{}"
     },
     "clock": {
       "timezone": "America/Chicago",
@@ -187,12 +189,27 @@
       "on-click": "wlogout"
     },
     "custom/swaync": {
-      "format": " ",
       "tooltip": false,
-      "on-click": "swaync-client -t -sw"
+      "format": "{icon}",
+      "format-icons": {
+        "none": "󰂜",
+        "notification": "󰂚",
+        "dnd-none": "󰂛",
+        "dnd-notification": "󰂛",
+        "inhibited-none": "󰂜",
+        "inhibited-notification": "󰂚",
+        "dnd-inhibited-none": "󰂛",
+        "dnd-inhibited-notification": "󰂛"
+      },
+      "return-type": "json",
+      "exec-if": "which swaync-client",
+      "exec": "swaync-client -swb",
+      "on-click": "swaync-client -t -sw",
+      "on-click-right": "swaync-client -d -sw",
+      "escape": true
     },
     "custom/drawer": {
-      "format": " ",
+      "format": "  ",
       "tooltip": false
     },
     // Groups

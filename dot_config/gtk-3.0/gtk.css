@@ -1,0 +1,83 @@
+/* Everforest Dark Hard — libadwaita / adw-gtk3 color overrides.
+ * Edit the hex values below to recolor every GTK3 (adw-gtk3) and GTK4/libadwaita
+ * app: pavucontrol, blueman, nm dialogs, nautilus, etc. No GUI needed — change a
+ * hex, save, reopen the app. This is the maintained replacement for Gradience.
+ *
+ * Palette:  bg0 #272e33   bg_dim #1e2326   bg1 #2e383c   fg #d3c6aa
+ *           green #a7c080  forest #83a35e   red #e67e80   yellow #dbbc7f   blue #7fbbb3
+ */
+
+/* accent (selection, focus, switches, suggested buttons) */
+@define-color accent_color        #a7c080;
+@define-color accent_bg_color     #83a35e;
+@define-color accent_fg_color     #272e33;
+
+/* surfaces */
+@define-color window_bg_color     #272e33;
+@define-color window_fg_color     #d3c6aa;
+@define-color view_bg_color       #1e2326;
+@define-color view_fg_color       #d3c6aa;
+@define-color headerbar_bg_color  #2e383c;
+@define-color headerbar_fg_color  #d3c6aa;
+@define-color card_bg_color       #2e383c;
+@define-color card_fg_color       #d3c6aa;
+@define-color popover_bg_color    #2e383c;
+@define-color popover_fg_color    #d3c6aa;
+@define-color dialog_bg_color     #272e33;
+@define-color dialog_fg_color     #d3c6aa;
+@define-color sidebar_bg_color    #1e2326;
+@define-color sidebar_fg_color    #d3c6aa;
+
+/* semantic */
+@define-color destructive_bg_color #e67e80;
+@define-color destructive_fg_color #272e33;
+@define-color success_bg_color     #a7c080;
+@define-color success_fg_color     #272e33;
+@define-color warning_bg_color     #dbbc7f;
+@define-color warning_fg_color     #272e33;
+@define-color error_bg_color       #e67e80;
+@define-color error_fg_color       #272e33;
+
+/* ── geometry: sharper, squared corners + thinner borders ──
+ * radius 0 = fully square; bump to 2–4px if you want a touch of softness.
+ * Edit freely — change a value, save, reopen the app.
+ */
+button, .button,
+entry, spinbutton,
+.card, .view,
+popover, popover > contents, popover > arrow,
+menu, .menu, .context-menu, .popup,
+frame, .frame,
+notebook, notebook header,
+headerbar, .titlebar,
+tooltip, .osd, .toast,
+scale trough, scale slider,
+progressbar trough, progressbar progress,
+.linked > * {
+    border-radius: 0;
+}
+
+/* thinner (1px) borders */
+button, .button,
+entry, spinbutton,
+frame, .frame, .card,
+separator {
+    border-width: 1px;
+}
+
+/* thin, square focus outline instead of a thick rounded glow */
+*:focus, *:focus-visible {
+    outline-width: 1px;
+    outline-offset: 0;
+    border-radius: 0;
+}
+
+/* force-square popup menus (nm-applet wifi menu, right-click menus).
+ * !important beats the theme's more-specific menu rule; `decoration` is the
+ * shadow frame that draws the rounded outer corner. */
+menu, menu.background, .menu, .context-menu, .csd.popup,
+menu menuitem, menuitem,
+popover, popover.background, popover > contents, popover > arrow,
+window.popup, .popup > decoration, menu > decoration, decoration {
+    border-radius: 0;
+}

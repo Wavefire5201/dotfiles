@@ -51,6 +51,11 @@ windowrule = match:class ^(kitty-floating)$, size (monitor_w*0.50) (monitor_h*0.
 windowrule = match:class ^(kitty-floating)$, size (monitor_w*0.70) (monitor_h*0.65)
 {{- end }}
 
+# raycast-style notes popup (Super+W)
+windowrule = match:class ^(notes)$, float 1
+windowrule = match:class ^(notes)$, center 1
+windowrule = match:class ^(notes)$, size (monitor_w*0.5) (monitor_h*0.6)
+
 # Make sure it doesn't get caught by other window rules
 # windowrule = match:class ^(kitty)$ match:title ^(?!Floating Terminal).*$, tile true
 layerrule {

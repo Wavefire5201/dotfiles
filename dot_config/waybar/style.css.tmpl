@@ -9,6 +9,7 @@
     {{- else if eq .chezmoi.hostname "zephyrus" }}
     font-size: 15px;
     {{- end }}
+    font-weight: normal;
 }
 
 /* Waybar Window Styles */
@@ -249,20 +250,50 @@ button:hover {
 }
 
 #privacy-item {
-    padding: 0 5px;
-    color: #1e2326;
+    padding: 0 4px;
+    background-color: transparent;
 }
 
+/* minimal: tinted icon only, no filled block */
 #privacy-item.screenshare {
-    background-color: #e69875;
+    color: #e69875;
 }
 
 #privacy-item.audio-in {
-    background-color: #e67e80;
+    color: #a7c080;
 }
 
 #privacy-item.audio-out {
-    background-color: #7fbbb3;
+    color: #7fbbb3;
+}
+
+/* custom mic indicator: green unmuted, red muted (click to toggle) */
+#custom-micmute {
+    padding: 0 8px 0 4px;
+}
+#custom-micmute.unmuted {
+    color: #a7c080;
+}
+#custom-micmute.muted {
+    color: #e67e80;
+}
+
+/* notification bell: extra breathing room from the bar's right edge */
+#custom-swaync {
+    padding-right: 14px;
+}
+
+/* minimal, squared tooltips (privacy "Brave input" popup, etc.) */
+tooltip {
+    background-color: #1e2326;
+    border: 1px solid #4f585e;
+    border-radius: 0;
+    padding: 2px 8px;
+}
+tooltip label {
+    color: #d3c6aa;
+    font-size: 14px;
+    padding: 0;
 }
 
 /* Scratchpad */
