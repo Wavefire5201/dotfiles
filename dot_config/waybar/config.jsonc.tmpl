@@ -81,6 +81,21 @@
     "tray": {
       "spacing": 10
     },
+    "privacy": {
+      "icon-size": 14,
+      "icon-spacing": 6,
+      "transition-duration": 200,
+      "modules": [
+        { "type": "screenshare" },
+        { "type": "audio-in" },
+        { "type": "audio-out" }
+      ],
+      "ignore": [
+        { "type": "audio-in", "name": "gsr-default_input" },
+        { "type": "audio-in", "name": "gsr-default_output" },
+        { "type": "audio-in", "name": "gpu-screen-recorder" }
+      ]
+    },
     "clock": {
       "timezone": "America/Chicago",
       "format": "{:%A %b %d %I:%M %p}",
