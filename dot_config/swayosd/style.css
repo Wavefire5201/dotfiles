@@ -1,0 +1,42 @@
+/* swayosd — Everforest Dark Hard, squared to match waybar/tooltips */
+
+window#osd {
+    padding: 10px 14px;
+    border-radius: 0;
+    border: 1px solid #4f585e;
+    background-color: #1e2326;
+}
+
+/* icon + progress row */
+window#osd #container {
+    margin: 10px;
+}
+
+window#osd image,
+window#osd label {
+    color: #d3c6aa;
+}
+
+/* dim the icon when the action is a mute/disabled state */
+window#osd image:disabled {
+    opacity: 0.5;
+}
+
+window#osd progressbar {
+    min-height: 6px;
+    border-radius: 0;
+    background: transparent;
+}
+
+window#osd trough {
+    min-height: 6px;
+    border-radius: 0;
+    border: none;
+    background-color: #2e383c;
+}
+
+window#osd progress {
+    min-height: 6px;
+    border-radius: 0;
+    background-color: #83a35e; /* Forest accent */
+}
