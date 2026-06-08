@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 # Everforest theme bootstrap — installs the bits that can't live in chezmoi as
-# tracked files (the Colloid icon theme + Everforest GTK theme are thousands of
-# generated files). The matching config files (gtk settings.ini, xsettingsd.conf,
+# tracked files (the Colloid icon theme is thousands of generated files; adw-gtk3
+# is a packaged theme). The Everforest *colours* and squared geometry come from
+# the chezmoi-tracked gtk-3.0/gtk.css + gtk-4.0/gtk.css layered on top of the
+# neutral adw-gtk3 base — so there is no separate Everforest GTK theme to build.
+# The matching config files (gtk settings.ini, xsettingsd.conf,
 # xdg-desktop-portal/hyprland-portals.conf, EverforestHard.colors) ARE chezmoi-
 # managed and applied by `chezmoi apply`.
 #
 # Run once on a fresh machine after `chezmoi apply`:  ~/.local/bin/setup-theme.sh
-# Requires: git, sassc, ddcutil(optional). gvfs (for swaync album art over https).
+# Requires: git, sassc (for Colloid). gvfs (for swaync album art over https).
 set -euo pipefail
 
 ICONS="$HOME/.local/share/icons"
 THEMES="$HOME/.themes"
 ICON_THEME="Colloid-Green-Everforest-Dark"
-GTK_THEME="Everforest-Green-Dark"
+GTK_THEME="adw-gtk3-dark"   # neutral base; Everforest tint lives in the tracked gtk.css
 KDE_SCHEME="EverforestHard"
 
 tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
@@ -22,9 +25,11 @@ echo ">> Colloid icon theme (Everforest scheme, green folders)"
 git clone --depth 1 https://github.com/vinceliuice/Colloid-icon-theme "$tmp/colloid"
 "$tmp/colloid/install.sh" -d "$ICONS" -s everforest -t green
 
-echo ">> Everforest GTK theme (dark, green, libadwaita link)"
-git clone --depth 1 https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme "$tmp/egtk"
-"$tmp/egtk/themes/install.sh" -c dark -t green -l
+echo ">> adw-gtk3 base theme (libadwaita look for GTK3; gtk.css adds the Everforest colours)"
+if ! ls -d /usr/share/themes/adw-gtk3* "$THEMES"/adw-gtk3* \
+        "$HOME/.local/share/themes"/adw-gtk3* >/dev/null 2>&1; then
+  sudo pacman -S --needed --noconfirm adw-gtk3
+fi
 
 echo ">> audio-card form-factor symlinks (so GTK4 pavucontrol shows device icons)"
 T="$ICONS/$ICON_THEME"

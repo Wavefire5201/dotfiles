@@ -1,0 +1,21 @@
+# Global markdownlint config (~/.markdownlint.yaml) — relaxed for casual writing.
+#
+# Why this exists at $HOME and not just in ~/notes: nvim-lint (LazyVim) pipes the
+# buffer to `markdownlint-cli2` over STDIN, which has no file path to anchor
+# config discovery — so a per-directory ~/notes/.markdownlint.yaml is never found.
+# markdownlint-cli2 instead walks up from the current working directory; since
+# nvim's cwd is virtually always somewhere under $HOME, a config here is found.
+# A project that ships its own .markdownlint.* still wins (it's closer to cwd).
+default: true
+
+MD013: false   # line length (no hard wrap nag)
+MD041: false   # first line doesn't have to be a top-level heading
+MD033: false   # allow inline HTML
+MD024: false   # allow duplicate headings
+MD026: false   # allow trailing punctuation in headings
+MD012: false   # allow multiple consecutive blank lines
+MD036: false   # allow emphasis-as-heading
+MD022: false   # don't require blank lines around headings
+MD031: false   # don't require blank lines around fenced code
+MD007: false   # don't enforce list indent width
+MD025: false   # allow multiple top-level headings
