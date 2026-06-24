@@ -31,6 +31,10 @@
       "custom/micmute",
       // "temperature",
       "memory",
+      // AI usage widgets
+      "custom/claudebar",
+      "custom/codexbar",
+      "custom/opencode-go",
       {{- if eq .chezmoi.hostname "galileo" }}
       // "cpu",
       {{- end }}
@@ -183,6 +187,31 @@
       ]
     },
     // Custom modules
+    // AI usage widgets (claudebar/codexbar via wrapper scripts)
+    "custom/claudebar": {
+      "exec": "~/.config/waybar/scripts/claude-usage.sh",
+      "return-type": "json",
+      "interval": 300,
+      "signal": 13,
+      "tooltip": true,
+      "on-click": "xdg-open https://claude.ai/settings/usage"
+    },
+    "custom/codexbar": {
+      "exec": "~/.config/waybar/scripts/codex-usage.sh",
+      "return-type": "json",
+      "interval": 300,
+      "signal": 12,
+      "tooltip": true,
+      "on-click": "xdg-open https://chatgpt.com/codex/settings/usage"
+    },
+    "custom/opencode-go": {
+      "exec": "~/.config/waybar/scripts/opencode-go-usage.py",
+      "return-type": "json",
+      "interval": 300,
+      "signal": 11,
+      "tooltip": true,
+      "on-click": "xdg-open https://opencode.ai/auth"
+    },
     "custom/powermenu": {
       "format": "  ⏻  ",
       "tooltip": false,
