@@ -36,7 +36,7 @@ windowrule = match:class clipse, size 622 652 # set the size of the window as ne
 # Make Dolphin file picker (e.g., "Save File" dialog) float
 windowrule = match:class org.freedesktop.impl.portal.desktop.kde, float 1
 {{ if eq .chezmoi.hostname "galileo" }}
-windowrule = match:class org.freedesktop.impl.portal.desktop.kde, size (monitor_w*0.45) (monitor_h*0.50)
+windowrule = match:class org.freedesktop.impl.portal.desktop.kde, size (monitor_w*0.45) (monitor_h*0.45)
 {{ else if eq .chezmoi.hostname "zephyrus" }}
 windowrule = match:class org.freedesktop.impl.portal.desktop.kde, size (monitor_w*0.70) (monitor_h*0.65)
 {{ end }}
@@ -112,6 +112,17 @@ windowrule = match:class ^(swappy)$, center 1
 windowrule = match:class ^(mpv|imv|org\.gnome\.Loupe|qalculate-gtk)$, float 1
 
 # === universal file pickers (any app) ===
+# ~0.45x0.45 of the monitor (derived from a live 1150x644 dialog on 2560x1440)
+# so they stop spawning near-fullscreen; centered for consistency.
 windowrule = match:title ^(Open File|Save File|Save As|File Upload|Select Folder|Choose Files)$, float 1
+windowrule = match:title ^(Open File|Save File|Save As|File Upload|Select Folder|Choose Files)$, size (monitor_w*0.45) (monitor_h*0.45)
+windowrule = match:title ^(Open File|Save File|Save As|File Upload|Select Folder|Choose Files)$, center 1
+
+# === Chromium/Brave native file dialogs ===
+# These open as a browser-class window titled "<origin> wants to save/open"
+# (the in-browser upload/download picker) and otherwise spawn near-fullscreen.
+windowrule = match:title ^(.* wants to (save|open).*)$, float 1
+windowrule = match:title ^(.* wants to (save|open).*)$, size (monitor_w*0.45) (monitor_h*0.45)
+windowrule = match:title ^(.* wants to (save|open).*)$, center 1
 
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
