@@ -1,0 +1,35 @@
+{
+  "id": "ai-usage-lite",
+  "name": "AI Usage Lite",
+  "version": "0.1.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "wavefire",
+  "license": "MIT",
+  "description": "Compact Claude, Codex, and OpenCode Go usage widget.",
+  "tags": ["Bar", "Productivity", "AI"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "refreshIntervalSec": 120,
+      "order": "claude,codex,opencode",
+      "separator": "  ",
+      "showTooltips": true,
+      "showOnlyWorst": false,
+      "claudeEnabled": true,
+      "codexEnabled": true,
+      "opencodeEnabled": true,
+      "claudeFormat": "Cl {session_pct}%",
+      "codexFormat": "Cx {session_pct}%",
+      "opencodeFormat": "Go {max_pct}%",
+      "tooltipFormat": "compact"
+    }
+  }
+}

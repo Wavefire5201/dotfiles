@@ -1,15 +1,16 @@
 # dotfiles
 
-My first rice with Hyprland, going for a minimalistic style.
+my first rice with hyprland, going for a minimalistic style.
 
-This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi).
+this dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi).
 
-## Showcase
+## showcase
 
 ![A Picture of my Desktop](pictures/desktop.png)
 ![General showcase](pictures/showcase.png)
 ![A Picture of my hyprlock setup](pictures/hyprlock.png)
 
+<!--
 ## To-Do
 
 - ~~Improve screenshot workflow (edit after screenshot)~~
@@ -23,7 +24,8 @@ This dotfiles repo is managed with [chezmoi](https://github.com/twpayne/chezmoi)
   - ~~rofi-emoji~~
   - rofi-calc
 - Make scripts for rofi
+-->
 
-## Useful links and snippets
+## useful links and snippets
 
 [hyprland-and-ssh-agent](https://www.lorenzobettini.it/2023/09/hyprland-and-ssh-agent/)

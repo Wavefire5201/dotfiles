@@ -81,3 +81,4 @@ popover, popover.background, popover > contents, popover > arrow,
 window.popup, .popup > decoration, menu > decoration, decoration {
     border-radius: 0;
 }
+@import 'colors.css';

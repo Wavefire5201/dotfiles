@@ -1,0 +1,30 @@
+{
+  "id": "fcitx5-indicator",
+  "name": "Fcitx5 Input Method Indicator",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "wavefire",
+  "official": false,
+  "license": "MIT",
+  "description": "Shows the current fcitx5 input method in the bar and displays toast notifications on language switch.",
+  "tags": [
+    "Bar",
+    "Input",
+    "Language"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "enableToast": true,
+      "pollInterval": 500,
+      "showIcon": true,
+      "mappings": "keyboard-us=US,mozc=JP,pinyin=ZH,mozc-katakana=カ"
+    }
+  }
+}
