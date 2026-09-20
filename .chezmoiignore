@@ -3,3 +3,6 @@
 readme.md
 pictures
 pictures/**
+
+# fcitx5 rewrites this itself whenever the input method changes.
+.config/fcitx5/profile
