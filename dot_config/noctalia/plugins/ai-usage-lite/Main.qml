@@ -48,14 +48,16 @@ Item {
   function collectorCommand() {
     return [
       "uv", "run", "--script", root.pluginDir + "/collector.py",
-      "--order", cfg.order ?? "claude,codex,opencode",
+      "--order", cfg.order ?? "claude,codex,antigravity,opencode",
       "--separator", cfg.separator ?? "  ",
       "--claude-format", cfg.claudeFormat ?? "Cl {session_pct}%",
       "--codex-format", cfg.codexFormat ?? "Cx {session_pct}%",
+      "--antigravity-format", cfg.antigravityFormat ?? "AG {worst_pct}%",
       "--opencode-format", cfg.opencodeFormat ?? "Go {max_pct}%",
     ].concat(cfg.showOnlyWorst ? ["--only-worst"] : [])
      .concat((cfg.claudeEnabled ?? true) ? ["--claude-enabled"] : [])
      .concat((cfg.codexEnabled ?? true) ? ["--codex-enabled"] : [])
+     .concat((cfg.antigravityEnabled ?? true) ? ["--antigravity-enabled"] : [])
      .concat((cfg.opencodeEnabled ?? true) ? ["--opencode-enabled"] : []);
   }
 

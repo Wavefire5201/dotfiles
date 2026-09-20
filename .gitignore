@@ -1,3 +1,5 @@
 # oh-my-claudecode runtime state — never belongs in the dotfiles repo
 .omc/
 **/.omc/
+__pycache__/
+*.pyc

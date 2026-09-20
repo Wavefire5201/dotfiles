@@ -11,7 +11,11 @@ Item {
   readonly property var geometryPlaceholder: panelContainer
   readonly property bool allowAttach: true
   property real contentPreferredWidth: 380 * Style.uiScaleRatio
-  property real contentPreferredHeight: 420 * Style.uiScaleRatio
+  // Grow with however many providers are enabled instead of clipping at a
+  // fixed height; capped so a broken collector cannot fill the screen.
+  readonly property real contentMaxHeight: 900 * Style.uiScaleRatio
+  property real contentPreferredHeight: Math.min(contentMaxHeight,
+                                                 contentColumn.implicitHeight + Style.marginL * 2)
 
   anchors.fill: parent
 
@@ -21,6 +25,7 @@ Item {
     color: "transparent"
 
     ColumnLayout {
+      id: contentColumn
       anchors.fill: parent
       anchors.margins: Style.marginL
       spacing: Style.marginL

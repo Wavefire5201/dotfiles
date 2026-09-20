@@ -19,15 +19,17 @@
   "metadata": {
     "defaultSettings": {
       "refreshIntervalSec": 120,
-      "order": "claude,codex,opencode",
+      "order": "claude,codex,antigravity,opencode",
       "separator": "  ",
       "showTooltips": true,
       "showOnlyWorst": false,
       "claudeEnabled": true,
       "codexEnabled": true,
+      "antigravityEnabled": true,
       "opencodeEnabled": true,
       "claudeFormat": "Cl {session_pct}%",
       "codexFormat": "Cx {session_pct}%",
+      "antigravityFormat": "AG {worst_pct}%",
       "opencodeFormat": "Go {max_pct}%",
       "tooltipFormat": "compact"
     }

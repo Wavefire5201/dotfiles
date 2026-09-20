@@ -21,9 +21,11 @@ ColumnLayout {
     pluginApi.pluginSettings.showOnlyWorst = onlyWorst.checked;
     pluginApi.pluginSettings.claudeEnabled = claudeToggle.checked;
     pluginApi.pluginSettings.codexEnabled = codexToggle.checked;
+    pluginApi.pluginSettings.antigravityEnabled = antigravityToggle.checked;
     pluginApi.pluginSettings.opencodeEnabled = opencodeToggle.checked;
     pluginApi.pluginSettings.claudeFormat = claudeFormat.text.trim().length > 0 ? claudeFormat.text : defaults.claudeFormat;
     pluginApi.pluginSettings.codexFormat = codexFormat.text.trim().length > 0 ? codexFormat.text : defaults.codexFormat;
+    pluginApi.pluginSettings.antigravityFormat = antigravityFormat.text.trim().length > 0 ? antigravityFormat.text : defaults.antigravityFormat;
     pluginApi.pluginSettings.opencodeFormat = opencodeFormat.text.trim().length > 0 ? opencodeFormat.text : defaults.opencodeFormat;
     pluginApi.saveSettings();
   }
@@ -50,8 +52,8 @@ ColumnLayout {
     id: orderInput
     Layout.fillWidth: true
     label: "Provider order"
-    description: "Comma-separated: claude,codex,opencode"
-    text: cfg.order ?? defaults.order ?? "claude,codex,opencode"
+    description: "Comma-separated: claude,codex,antigravity,opencode"
+    text: cfg.order ?? defaults.order ?? "claude,codex,antigravity,opencode"
     onTextChanged: root.saveSettings()
   }
 
@@ -91,6 +93,19 @@ ColumnLayout {
     Layout.fillWidth: true
     label: "Codex format"
     text: cfg.codexFormat ?? defaults.codexFormat ?? "Cx {session_pct}%"
+    onTextChanged: root.saveSettings()
+  }
+
+  RowLayout {
+    NToggle { id: antigravityToggle; checked: cfg.antigravityEnabled ?? true; onToggled: root.saveSettings() }
+    NText { text: "Antigravity"; color: Color.mOnSurface }
+  }
+  NTextInput {
+    id: antigravityFormat
+    Layout.fillWidth: true
+    label: "Antigravity format"
+    description: "Available: {worst_pct}"
+    text: cfg.antigravityFormat ?? defaults.antigravityFormat ?? "AG {worst_pct}%"
     onTextChanged: root.saveSettings()
   }
 

@@ -32,8 +32,9 @@
       // "temperature",
       "memory",
       // AI usage widgets
-      "custom/claudebar",
+      // "custom/claudebar",
       "custom/codexbar",
+      "custom/antigravity",
       "custom/opencode-go",
       {{- if eq .chezmoi.hostname "galileo" }}
       // "cpu",
@@ -188,14 +189,14 @@
     },
     // Custom modules
     // AI usage widgets (claudebar/codexbar via wrapper scripts)
-    "custom/claudebar": {
-      "exec": "~/.config/waybar/scripts/claude-usage.sh",
-      "return-type": "json",
-      "interval": 300,
-      "signal": 13,
-      "tooltip": true,
-      "on-click": "xdg-open https://claude.ai/settings/usage"
-    },
+    // "custom/claudebar": {
+    //   "exec": "~/.config/waybar/scripts/claude-usage.sh",
+    //   "return-type": "json",
+    //   "interval": 300,
+    //   "signal": 13,
+    //   "tooltip": true,
+    //   "on-click": "xdg-open https://claude.ai/settings/usage"
+    // },
     "custom/codexbar": {
       "exec": "~/.config/waybar/scripts/codex-usage.sh",
       "return-type": "json",
@@ -211,6 +212,14 @@
       "signal": 11,
       "tooltip": true,
       "on-click": "xdg-open https://opencode.ai/auth"
+    },
+    "custom/antigravity": {
+      "exec": "~/.config/waybar/scripts/antigravity-usage.py",
+      "return-type": "json",
+      "interval": 300,
+      "signal": 10,
+      "tooltip": true,
+      "on-click": "xdg-open https://antigravity.google"
     },
     "custom/powermenu": {
       "format": "  ⏻  ",
