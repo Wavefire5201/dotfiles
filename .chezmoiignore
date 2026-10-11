@@ -6,3 +6,7 @@ pictures/**
 
 # fcitx5 rewrites this itself whenever the input method changes.
 .config/fcitx5/profile
+
+# The jisho plugin's test suite runs from the source dir and is not part of the installed plugin.
+.config/noctalia/plugins/jisho/tests
+.config/noctalia/plugins/jisho/tests/**

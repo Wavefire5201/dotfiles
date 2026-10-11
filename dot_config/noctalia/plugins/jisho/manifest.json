@@ -1,0 +1,23 @@
+{
+  "id": "jisho",
+  "name": "Jisho",
+  "version": "1.0.0",
+  "description": "Look up Japanese words on jisho.org from the launcher",
+  "tags": ["Launcher", "Productivity"],
+  "minNoctaliaVersion": "4.4.1",
+  "author": "wavefire",
+  "license": "MIT",
+  "entryPoints": {
+    "main": "Main.qml",
+    "launcherProvider": "LauncherProvider.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "commandPrefix": "jisho",
+    "defaultSettings": {
+      "history": []
+    }
+  }
+}

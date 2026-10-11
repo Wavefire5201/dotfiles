@@ -30,6 +30,10 @@
         "ai-usage-lite": {
             "enabled": true,
             "sourceUrl": "local"
+        },
+        "jisho": {
+            "enabled": true,
+            "sourceUrl": "local"
         }
     },
     "version": 2
