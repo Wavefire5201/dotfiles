@@ -5,6 +5,7 @@
 # ///
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -83,14 +84,22 @@ def strip_markup(text):
     return re.sub(r"<[^>]+>", "", text or "")
 
 
-def run_waybar_helper(name, command):
+def run_waybar_helper(name, command, home=None):
     try:
-        proc = subprocess.run(command, text=True, capture_output=True, timeout=25)
+        env = None
+        if home is not None:
+            # codexbar hardcodes $HOME/.codex/auth.json and $HOME/.cache/codexbar,
+            # so a second ChatGPT workspace is read by pointing HOME at its profile.
+            env = dict(os.environ, HOME=str(home))
+        proc = subprocess.run(command, text=True, capture_output=True, timeout=25, env=env)
         raw = (proc.stdout or "").strip()
         if raw:
             parsed = json.loads(raw)
             text = strip_markup(str(parsed.get("text", "")).strip())
-            tooltip = str(parsed.get("tooltip", "")).strip()
+            # Strip markup here too: claudebar/codexbar emit Pango spans (e.g. the
+            # amber "Stale — data from …" marker) which Waybar renders but the
+            # noctalia panel shows literally, since it styles plain text itself.
+            tooltip = strip_markup(str(parsed.get("tooltip", "")).strip())
             return {
                 "id": name,
                 "ok": True,
@@ -327,22 +336,32 @@ def symbolize_pace(text):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--order", default="claude,codex,antigravity,opencode")
+    parser.add_argument("--order", default="claude,codex,codex2,antigravity,opencode")
     parser.add_argument("--separator", default="  ")
     parser.add_argument("--only-worst", action="store_true")
     parser.add_argument("--claude-enabled", action="store_true")
     parser.add_argument("--codex-enabled", action="store_true")
+    parser.add_argument("--codex2-enabled", action="store_true")
+    parser.add_argument("--codex2-profile", default="alt")
+    parser.add_argument("--codex-label", default="")
+    parser.add_argument("--codex2-label", default="")
     parser.add_argument("--antigravity-enabled", action="store_true")
     parser.add_argument("--opencode-enabled", action="store_true")
     parser.add_argument("--claude-format", default="Cl {session_pct}%")
     parser.add_argument("--codex-format", default="Cx {session_pct}%")
+    parser.add_argument("--codex2-format", default="Cx2 {session_pct}%")
     parser.add_argument("--antigravity-format", default="AG {worst_pct}%")
     parser.add_argument("--opencode-format", default="Go {max_pct}%")
     args = parser.parse_args()
-    args.order = (args.order or "claude,codex,antigravity,opencode").strip() or "claude,codex,antigravity,opencode"
+    args.order = (args.order or "claude,codex,codex2,antigravity,opencode").strip() or "claude,codex,codex2,antigravity,opencode"
     args.separator = args.separator if args.separator is not None and args.separator != "" else "  "
     args.claude_format = (args.claude_format or "Cl {session_pct}%").strip() or "Cl {session_pct}%"
     args.codex_format = (args.codex_format or "Cx {session_pct}%").strip() or "Cx {session_pct}%"
+    args.codex2_format = (args.codex2_format or "Cx2 {session_pct}%").strip() or "Cx2 {session_pct}%"
+    args.codex2_profile = (args.codex2_profile or "alt").strip() or "alt"
+    args.codex_label = (args.codex_label or "").strip()
+    # tooltip headers: "Codex · <label>", falling back to the profile name
+    args.codex2_label = (args.codex2_label or "").strip() or args.codex2_profile
     args.antigravity_format = (args.antigravity_format or "AG {worst_pct}%").strip() or "AG {worst_pct}%"
     args.opencode_format = (args.opencode_format or "Go {max_pct}%").strip() or "Go {max_pct}%"
 
@@ -357,8 +376,19 @@ def main():
         providers["codex"] = run_waybar_helper("codex", [
             str(HOME / ".local/bin/codexbar"),
             "--format", args.codex_format,
-            "--tooltip-format", "Codex\nSession  {session_pct}%  ·  {session_reset}  ·  {session_pace_pts}\nWeekly   {weekly_pct}%  ·  {weekly_reset}  ·  {weekly_pace_pts}"
+            "--tooltip-format", ("Codex" + (" \u00b7 " + args.codex_label if args.codex_label else "")) + "\nSession  {session_pct}%  ·  {session_reset}  ·  {session_pace_pts}\nWeekly   {weekly_pct}%  ·  {weekly_reset}  ·  {weekly_pace_pts}"
         ])
+    if args.codex2_enabled:
+        # Second ChatGPT workspace = its own quota, its own login under
+        # ~/.local/share/codex-profiles/<profile>/. Skip silently if not logged in.
+        codex2_home = HOME / ".local/share/codex-profiles" / args.codex2_profile
+        if (codex2_home / ".codex" / "auth.json").is_file():
+            providers["codex2"] = run_waybar_helper("codex2", [
+                str(HOME / ".local/bin/codexbar"),
+                "--format", args.codex2_format,
+                "--tooltip-format", "Codex \u00b7 " + args.codex2_label + "\nSession  {session_pct}%  \u00b7  {session_reset}  \u00b7  {session_pace_pts}\nWeekly   {weekly_pct}%  \u00b7  {weekly_reset}  \u00b7  {weekly_pace_pts}"
+            ], home=codex2_home)
+
     if args.opencode_enabled:
         providers["opencode"] = opencode_go_provider(args.opencode_format)
     if args.antigravity_enabled:

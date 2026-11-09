@@ -34,6 +34,7 @@
       // AI usage widgets
       // "custom/claudebar",
       "custom/codexbar",
+      "custom/codexbar-alt",
       "custom/antigravity",
       "custom/opencode-go",
       {{- if eq .chezmoi.hostname "galileo" }}
@@ -202,6 +203,17 @@
       "return-type": "json",
       "interval": 300,
       "signal": 12,
+      "tooltip": true,
+      "on-click": "xdg-open https://chatgpt.com/codex/settings/usage"
+    },
+    // Second ChatGPT workspace = a separate quota. The wrapper points HOME at
+    // ~/.local/share/codex-profiles/power so codexbar reads that login's
+    // auth.json + cache. Hides itself until that profile is logged in.
+    "custom/codexbar-alt": {
+      "exec": "~/.config/waybar/scripts/codex-usage.sh power",
+      "return-type": "json",
+      "interval": 300,
+      "signal": 14,
       "tooltip": true,
       "on-click": "xdg-open https://chatgpt.com/codex/settings/usage"
     },

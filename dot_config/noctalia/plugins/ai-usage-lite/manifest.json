@@ -5,8 +5,12 @@
   "minNoctaliaVersion": "3.6.0",
   "author": "wavefire",
   "license": "MIT",
-  "description": "Compact Claude, Codex, and OpenCode Go usage widget.",
-  "tags": ["Bar", "Productivity", "AI"],
+  "description": "Compact Claude, Codex (multi-workspace), and OpenCode Go usage widget.",
+  "tags": [
+    "Bar",
+    "Productivity",
+    "AI"
+  ],
   "entryPoints": {
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",
@@ -19,7 +23,7 @@
   "metadata": {
     "defaultSettings": {
       "refreshIntervalSec": 120,
-      "order": "claude,codex,antigravity,opencode",
+      "order": "claude,codex,codex2,antigravity,opencode",
       "separator": "  ",
       "showTooltips": true,
       "showOnlyWorst": false,
@@ -31,7 +35,12 @@
       "codexFormat": "Cx {session_pct}%",
       "antigravityFormat": "AG {worst_pct}%",
       "opencodeFormat": "Go {max_pct}%",
-      "tooltipFormat": "compact"
+      "tooltipFormat": "compact",
+      "codex2Enabled": false,
+      "codex2Format": "Cx2 {session_pct}%",
+      "codex2Profile": "alt",
+      "codexLabel": "",
+      "codex2Label": ""
     }
   }
 }

@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 6.11
 import Quickshell
 import Quickshell.Io
 
@@ -48,15 +48,20 @@ Item {
   function collectorCommand() {
     return [
       "uv", "run", "--script", root.pluginDir + "/collector.py",
-      "--order", cfg.order ?? "claude,codex,antigravity,opencode",
+      "--order", cfg.order ?? "claude,codex,codex2,antigravity,opencode",
       "--separator", cfg.separator ?? "  ",
       "--claude-format", cfg.claudeFormat ?? "Cl {session_pct}%",
       "--codex-format", cfg.codexFormat ?? "Cx {session_pct}%",
+      "--codex2-format", cfg.codex2Format ?? "Cx2 {session_pct}%",
+      "--codex2-profile", cfg.codex2Profile ?? "alt",
+      "--codex-label", cfg.codexLabel ?? "",
+      "--codex2-label", cfg.codex2Label ?? "",
       "--antigravity-format", cfg.antigravityFormat ?? "AG {worst_pct}%",
       "--opencode-format", cfg.opencodeFormat ?? "Go {max_pct}%",
     ].concat(cfg.showOnlyWorst ? ["--only-worst"] : [])
      .concat((cfg.claudeEnabled ?? true) ? ["--claude-enabled"] : [])
      .concat((cfg.codexEnabled ?? true) ? ["--codex-enabled"] : [])
+     .concat((cfg.codex2Enabled ?? false) ? ["--codex2-enabled"] : [])
      .concat((cfg.antigravityEnabled ?? true) ? ["--antigravity-enabled"] : [])
      .concat((cfg.opencodeEnabled ?? true) ? ["--opencode-enabled"] : []);
   }
