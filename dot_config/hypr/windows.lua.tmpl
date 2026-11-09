@@ -1,0 +1,100 @@
+------------------------------
+--- WINDOWS AND WORKSPACES ---
+------------------------------
+-- See https://wiki.hypr.land/configuring/core/rules/
+
+local rule = hl.window_rule
+
+-- Ignore maximize requests from apps
+rule({ match = { class = ".*" }, suppress_event = "maximize" })
+
+-- Fix some dragging issues with XWayland
+rule({
+    match    = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false },
+    no_focus = true,
+})
+
+{{ if eq .chezmoi.hostname "galileo" -}}
+local mainMonitor = "DP-1"
+local portalSize  = "monitor_w*0.45 monitor_h*0.45"
+local kittySize   = "monitor_w*0.50 monitor_h*0.50"
+{{- else if eq .chezmoi.hostname "zephyrus" -}}
+local mainMonitor = "eDP-1"
+local portalSize  = "monitor_w*0.70 monitor_h*0.65"
+local kittySize   = "monitor_w*0.70 monitor_h*0.65"
+{{- end }}
+
+for i = 1, 5 do
+    hl.workspace_rule({ workspace = tostring(i), monitor = mainMonitor, persistent = true, default = i == 1 or nil })
+end
+
+-- clipse
+rule({ match = { class = "clipse" }, float = true, size = { 622, 652 } })
+
+-- Dolphin file picker (e.g. "Save File" dialog)
+rule({ match = { class = "org.freedesktop.impl.portal.desktop.kde" }, float = true, size = portalSize, center = true })
+
+-- floating kitty (Super+Q) and raycast-style notes popup (Super+W)
+rule({ match = { class = "^(kitty-floating)$" }, float = true, center = true, size = kittySize })
+rule({ match = { class = "^(notes)$" },          float = true, center = true, size = "monitor_w*0.5 monitor_h*0.6" })
+
+-- vicinae / swaync (retired, kept in case they come back)
+hl.layer_rule({ match = { namespace = "vicinae" }, blur = true, ignore_alpha = 0, no_anim = true })
+hl.layer_rule({ match = { namespace = "swaync-control-center" },     blur = true, ignore_alpha = 0.5 })
+hl.layer_rule({ match = { namespace = "swaync-notification-window" }, blur = true, ignore_alpha = 0.5 })
+
+-- slurp selection (grimblast): no fade, so screenshots don't catch a dark border.
+-- grimblast's own `hyprctl keyword layerrule` no longer works under Lua.
+hl.layer_rule({ match = { namespace = "selection" }, no_anim = true })
+
+-- Browser extension popups (Bitwarden, 1Password, etc.) have an initialTitle of `_crx_<extension-id>`
+rule({ match = { initial_title = "^_crx_.*$" }, float = true, center = true })
+rule({ match = { initial_title = "^_crx_nngceckbapebfimnlniiiahkandclblb$" }, size = { 500, 700 } })
+
+-- Picture-in-picture (YouTube, Twitch, etc.)
+rule({
+    match = { title = "^(Picture-in-Picture)$" },
+    float = true,
+    pin   = true,
+    size  = { 480, 270 },
+    move  = "monitor_w-window_w-20 monitor_h-window_h-20",
+})
+
+-- Authentication / password dialogs
+rule({ match = { class = "^(polkit-kde-authentication-agent-1)$" }, float = true, center = true })
+rule({ match = { class = "^(org\\.kde\\.kwalletmanager5|org\\.keepassxc\\.KeePassXC)$" }, float = true })
+rule({ match = { class = "^(ssh-askpass)$" }, float = true })
+
+-- System applets
+rule({ match = { class = "^(pavucontrol|\\.blueman-manager-wrapped|nm-connection-editor|blueberry\\.py)$" }, float = true })
+rule({ match = { class = "^(pavucontrol)$" }, size = { 600, 700 } })
+rule({ match = { class = "^(pavucontrol|\\.blueman-manager-wrapped|nm-connection-editor)$" }, center = true })
+
+-- Screenshot annotator
+rule({ match = { class = "^(swappy)$" }, float = true, center = true })
+
+-- Media viewers + calculators
+rule({ match = { class = "^(mpv|imv|org\\.gnome\\.Loupe|qalculate-gtk)$" }, float = true })
+
+-- Universal file pickers (any app): ~0.45x0.45 of the monitor, centered
+rule({
+    match  = { title = "^(Open File|Save File|Save As|File Upload|Select Folder|Choose Files)$" },
+    float  = true,
+    size   = "monitor_w*0.45 monitor_h*0.45",
+    center = true,
+})
+
+-- Chromium/Brave native file dialogs, titled "<origin> wants to save/open"
+rule({ match = { title = "^(.* wants to (save|open).*)$" }, float = true, size = "monitor_w*0.45 monitor_h*0.45", center = true })
+
+-- OpenScreen overlays (record HUD, source picker, countdown): frameless transparent Electron
+-- windows that ask for alwaysOnTop + bottom-centre, which Wayland ignores. They're fixed-size so
+-- they float; the editor tiles. pin only acts on floating windows, so it needs no float match.
+-- No move rule: it runs before the app grows the window, which then overhangs.
+rule({ match = { class = "^(openscreen)$", float = true }, border_size = 0, no_shadow = true, no_blur = true })
+rule({ match = { class = "^(openscreen)$" }, pin = true })
+
+-- Playwright / MCP test browser: Playwright drives the system Chrome channel (class
+-- `google-chrome`, distinct from brave-browser). Park it on workspace 10 without
+-- following or focusing, so a test run never interrupts what is on screen.
+rule({ match = { class = "^(google-chrome)$" }, workspace = "10 silent", no_focus = true })

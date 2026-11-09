@@ -19,9 +19,9 @@ if [ -z "$window_id" ] || [ "$window_id" == "null" ]; then
     [[ -n "$window_id" ]] && break
   done
 
-  # 0.53 batching: send multiple commands in one go to the IPC socket
+  # One eval runs float + center + focus in a single IPC call
   if [ -n "$window_id" ]; then
-    hyprctl --batch "dispatch setfloating address:$window_id; dispatch centerwindow address:$window_id; dispatch focuswindow address:$window_id"
+    w="address:$window_id"; hyprctl eval "hl.dispatch(hl.dsp.window.float({ window = \"$w\", action = \"enable\" })) hl.dispatch(hl.dsp.window.center({ window = \"$w\" })) hl.dispatch(hl.dsp.focus({ window = \"$w\" }))"
   fi
 else
   # Window exists
@@ -30,10 +30,10 @@ else
 
   if [ "$window_workspace" == "$current_workspace" ]; then
     # Toggle off: Move to special workspace (standard scratchpad)
-    hyprctl dispatch movetoworkspacesilent special:scratchpad,address:$window_id
+    hyprctl dispatch "hl.dsp.window.move({ window = \"address:$window_id\", workspace = \"special:scratchpad\", follow = false })"
   else
     # Toggle on: Bring to current workspace and focus
-    # Using --batch ensures the window moves AND gains focus in the same frame
-    hyprctl --batch "dispatch movetoworkspacesilent $current_workspace,address:$window_id; dispatch focuswindow address:$window_id"
+    # One eval moves the window AND focuses it in the same frame
+    w="address:$window_id"; hyprctl eval "hl.dispatch(hl.dsp.window.move({ window = \"$w\", workspace = $current_workspace, follow = false })) hl.dispatch(hl.dsp.focus({ window = \"$w\" }))"
   fi
 fi

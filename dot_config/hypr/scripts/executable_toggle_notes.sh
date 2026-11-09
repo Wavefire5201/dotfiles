@@ -17,15 +17,15 @@ if [ -z "$window_id" ] || [ "$window_id" == "null" ]; then
     [[ -n "$window_id" ]] && break
   done
   if [ -n "$window_id" ]; then
-    hyprctl --batch "dispatch setfloating address:$window_id; dispatch centerwindow address:$window_id; dispatch focuswindow address:$window_id"
+    w="address:$window_id"; hyprctl eval "hl.dispatch(hl.dsp.window.float({ window = \"$w\", action = \"enable\" })) hl.dispatch(hl.dsp.window.center({ window = \"$w\" })) hl.dispatch(hl.dsp.focus({ window = \"$w\" }))"
   fi
 else
   # Exists — toggle: hide to scratchpad if on this workspace, else summon here
   current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
   window_workspace=$(echo "$window_info" | jq -r '.workspace')
   if [ "$window_workspace" == "$current_workspace" ]; then
-    hyprctl dispatch movetoworkspacesilent special:scratchpad,address:$window_id
+    hyprctl dispatch "hl.dsp.window.move({ window = \"address:$window_id\", workspace = \"special:scratchpad\", follow = false })"
   else
-    hyprctl --batch "dispatch movetoworkspacesilent $current_workspace,address:$window_id; dispatch focuswindow address:$window_id"
+    w="address:$window_id"; hyprctl eval "hl.dispatch(hl.dsp.window.move({ window = \"$w\", workspace = $current_workspace, follow = false })) hl.dispatch(hl.dsp.focus({ window = \"$w\" }))"
   fi
 fi

@@ -89,7 +89,7 @@ case "${1:-region}" in
   pin)
     if grimblast --freeze save area "$file"; then
       wl-copy < "$file"
-      hyprctl dispatch exec "[float; pin; size 28% 28%; move 100%-30% 5%] imv \"$file\""
+      hyprctl dispatch "hl.dsp.exec_cmd([==[imv '$file']==], { float = true, pin = true, size = \"monitor_w*0.28 monitor_h*0.28\", move = \"monitor_w*0.7 monitor_h*0.05\" })"
       note "Pinned · $(basename "$file")" "$file"
     fi
     ;;

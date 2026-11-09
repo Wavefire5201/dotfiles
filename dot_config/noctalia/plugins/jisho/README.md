@@ -15,7 +15,7 @@ qs -c noctalia-shell ipc call plugin:jisho lookup 食べる
 qs -c noctalia-shell ipc call plugin:jisho toggle
 ```
 
-Bound to Super+Alt+J (selection) and Super+Alt+Shift+J (toggle) in `hypr/keybinds.conf`.
+Bound to Super+Alt+J (toggle) and Super+Alt+Shift+J (selection) in `hypr/keybinds.lua`.
 
 ## Tests
 

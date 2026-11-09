@@ -1,0 +1,163 @@
+-- Hyprland 0.57+ reads only this Lua config; hypridle/hyprlock still use hyprlang .conf.
+-- Wiki: https://wiki.hypr.land/configuring/  API stubs: /usr/share/hypr/stubs/hl.meta.lua
+
+require("keybinds")
+
+----------------
+--- MONITORS ---
+----------------
+
+{{ if eq .chezmoi.hostname "galileo" -}}
+hl.monitor({ output = "DP-1", mode = "2560x1440@165", position = "auto", scale = "auto" })
+-- hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@144", position = "0x0", scale = "auto", transform = 1 })
+{{- else if eq .chezmoi.hostname "zephyrus" -}}
+hl.monitor({ output = "eDP-1", mode = "2880x1800@120", position = "240x1080", scale = 2 })
+-- hl.monitor({ output = "DP-2", mode = "1920x1080@144", position = "0x0", scale = "auto" })      -- second monitor
+-- hl.monitor({ output = "DP-2", mode = "preferred", position = "auto", scale = 1, mirror = "eDP-1" }) -- mirror laptop
+{{- end }}
+
+-----------------
+--- AUTOSTART ---
+-----------------
+
+-- Hyprland ignores ~/.config/autostart, so apps' own "start at login" toggles do nothing
+-- Hyprland 0.57 imports env into systemd before hl.env runs, so systemd-started portals miss
+-- QT_QPA_PLATFORMTHEME and the KDE file dialog loses the Plasma theme. Push the theme vars too.
+local dbusEnv = "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME QT_QPA_PLATFORM XCURSOR_THEME XCURSOR_SIZE"
+
+hl.on("hyprland.start", function()
+    hl.exec_cmd("/usr/lib/pam_kwallet_init")
+    hl.exec_cmd("/usr/bin/kwalletd6")
+    hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
+    hl.exec_cmd("hypridle & playerctld daemon")
+    hl.exec_cmd("fcitx5 -d")
+    hl.exec_cmd("clipse -listen")
+    hl.exec_cmd("udiskie")
+    hl.exec_cmd("qs -c noctalia-shell")
+    hl.exec_cmd("kbuildsycoca6")
+    hl.exec_cmd("/opt/blip/bin/blip --background --delay 5")
+    hl.exec_cmd("handy")
+    -- paseo.service starts at boot (linger on); this only starts it if it was stopped.
+    -- Not restart: that kills agent turns in progress, so its agents lack WAYLAND_DISPLAY until a manual restart
+    hl.exec_cmd(dbusEnv .. " && systemctl --user start paseo.service")
+    -- Portals outlive Hyprland; one started between sessions has no XDG_CURRENT_DESKTOP, falls back to gtk, and loses ScreenCast
+    hl.exec_cmd(dbusEnv .. " && systemctl --user try-restart xdg-desktop-portal.service xdg-desktop-portal-hyprland.service xdg-desktop-portal-gtk.service plasma-xdg-desktop-portal-kde.service")
+end)
+
+-----------------------------
+--- ENVIRONMENT VARIABLES ---
+-----------------------------
+
+hl.env("XCURSOR_THEME", "macOS")
+hl.env("XCURSOR_SIZE", "24")
+hl.env("HYPRCURSOR_THEME", "macOS-hyprcursor")
+hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+hl.env("QT_QPA_PLATFORMTHEME", "kde")
+hl.env("ELECTRON_OZONE_PLATFORM_HINT", "wayland")
+hl.env("XDG_MENU_PREFIX", "arch-")
+hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+hl.env("XDG_SESSION_TYPE", "wayland")
+hl.env("SSH_AUTH_SOCK", os.getenv("XDG_RUNTIME_DIR") .. "/ssh-agent.socket")
+-- fcitx5: leave GTK_IM_MODULE and SDL_IM_MODULE unset on Wayland so apps use
+-- the native Wayland input-method frontend (see fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland)
+hl.env("QT_IM_MODULE", "fcitx")
+hl.env("XMODIFIERS", "@im=fcitx")
+
+---------------------
+--- LOOK AND FEEL ---
+---------------------
+
+hl.config({
+    general = {
+{{- if eq .chezmoi.hostname "galileo" }}
+        gaps_out    = { top = 10, right = 10, bottom = 5, left = 10 },
+        gaps_in     = 5,
+        border_size = 1,
+{{- else if eq .chezmoi.hostname "zephyrus" }}
+        gaps_out    = 0,
+        gaps_in     = 3,
+        border_size = 0,
+{{- end }}
+        col = {
+            active_border   = { colors = { "rgba(83a35eee)", "rgba(a7c080ee)" } },
+            inactive_border = "rgba(414b50aa)",
+        },
+        resize_on_border = false,
+        allow_tearing    = false, -- see https://wiki.hypr.land/configuring/extra/tearing/ first
+        snap = { enabled = true }, -- snap floating windows to screen edges and each other
+        layout = "dwindle",
+    },
+
+    decoration = {
+        rounding         = 0,
+        active_opacity   = 1.0,
+        inactive_opacity = 1.0,
+        shadow = {
+            enabled      = true,
+            range        = 4,
+            render_power = 3,
+            color        = "rgba(1a1a1aee)",
+        },
+        blur = {
+            enabled  = true,
+            size     = 3,
+            passes   = 1,
+            vibrancy = 0.1696,
+        },
+        -- 0.57 wobbly windows (spring physics while dragging/resizing); defaults except enabled
+        wobble = {
+            enabled   = false,
+            intensity = 0.1,
+            stiffness = 1000,
+            damping   = 12,
+        },
+    },
+
+    animations = { enabled = true },
+
+    dwindle = { preserve_split = true },
+    master  = { new_status = "master" },
+
+    misc = {
+        force_default_wallpaper = -1,
+        disable_hyprland_logo   = true,
+        mouse_move_enables_dpms = true,
+        key_press_enables_dpms  = true,
+        vrr = 3, -- adaptive sync: 0 off, 1 always, 2 any fullscreen, 3 fullscreen game/video (safest for VA panels)
+    },
+
+    render = {
+        direct_scanout = 2, -- auto: bypass compositing for fullscreen game content (lower latency)
+    },
+
+    ecosystem = {
+        no_update_news  = true, -- updates come from pacman; silence the in-compositor news popup
+        no_donation_nag = true,
+    },
+})
+
+hl.curve("easeOutQuint",   { type = "bezier", points = { { 0.23, 1 },    { 0.32, 1 } } })
+hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
+hl.curve("linear",         { type = "bezier", points = { { 0, 0 },       { 1, 1 } } })
+hl.curve("almostLinear",   { type = "bezier", points = { { 0.5, 0.5 },   { 0.75, 1 } } })
+hl.curve("quick",          { type = "bezier", points = { { 0.15, 0 },    { 0.1, 1 } } })
+
+hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
+hl.animation({ leaf = "border",        enabled = true,  speed = 5.39, bezier = "easeOutQuint" })
+hl.animation({ leaf = "windows",       enabled = true,  speed = 4.79, bezier = "easeOutQuint" })
+hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 4.1,  bezier = "easeOutQuint", style = "popin 87%" })
+hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 1.49, bezier = "linear",       style = "popin 87%" })
+hl.animation({ leaf = "fadeIn",        enabled = true,  speed = 1.73, bezier = "almostLinear" })
+hl.animation({ leaf = "fadeOut",       enabled = true,  speed = 1.46, bezier = "almostLinear" })
+hl.animation({ leaf = "fade",          enabled = true,  speed = 3.03, bezier = "quick" })
+hl.animation({ leaf = "layers",        enabled = true,  speed = 3.81, bezier = "easeOutQuint" })
+hl.animation({ leaf = "layersIn",      enabled = true,  speed = 4,    bezier = "easeOutQuint", style = "fade" })
+hl.animation({ leaf = "layersOut",     enabled = true,  speed = 1.5,  bezier = "linear",       style = "fade" })
+hl.animation({ leaf = "fadeLayersIn",  enabled = true,  speed = 1.79, bezier = "almostLinear" })
+hl.animation({ leaf = "fadeLayersOut", enabled = true,  speed = 1.39, bezier = "almostLinear" })
+hl.animation({ leaf = "workspaces",    enabled = false })
+
+require("input")
+require("windows")
