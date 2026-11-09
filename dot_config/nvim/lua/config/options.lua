@@ -15,3 +15,13 @@ vim.g.clipboard = {
   },
 }
 vim.opt.clipboard = "unnamedplus"
+
+-- `nvim some/dir` (incl. bare `chezmoi edit`) should work in that dir, not the
+-- shell's cwd; otherwise pickers fall back to cwd and search from ~.
+local arg = vim.fn.argv(0)
+if vim.fn.argc() == 1 and arg ~= "" and vim.fn.isdirectory(arg) == 1 then
+  vim.fn.chdir(arg)
+end
+
+-- Machine-local, untracked additions (lua/config/local.lua).
+pcall(require, "config.local")

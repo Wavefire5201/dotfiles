@@ -7,6 +7,33 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
+-- ── Notes: plain text (no markdown, no spell check) ──────────────────────────
+-- Only paths listed in lua/config/notes.lua are affected; markdown everywhere
+-- else keeps LazyVim's normal behaviour (incl. `lazyvim_wrap_spell`).
+local notes = require("config.notes")
+
+vim.api.nvim_create_autocmd({ "FileType", "BufReadPost", "BufNewFile", "BufEnter" }, {
+  group = vim.api.nvim_create_augroup("notes_plain", { clear = true }),
+  callback = function(ev)
+    if not notes.is_notes_buf(ev.buf) then
+      return
+    end
+    -- Defer so this runs after every other FileType autocmd (LazyVim's
+    -- treesitter start, Neovim's built-in markdown ftplugin, …).
+    vim.schedule(function()
+      notes.plainify(ev.buf)
+    end)
+  end,
+})
+
+-- Buffers opened from the command line finish their FileType before this file
+-- is loaded (VeryLazy), so sweep whatever is already open.
+for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+  if vim.api.nvim_buf_is_loaded(buf) and notes.is_notes_buf(buf) then
+    notes.plainify(buf)
+  end
+end
+
 -- ── VSCode-style autosave ────────────────────────────────────────────────────
 -- Saves ~800ms after you stop typing (debounced), and immediately on focus loss
 -- or switching buffers. It saves WITHOUT running format-on-save, so it never
@@ -60,3 +87,10 @@ do
     end,
   })
 end
+
+-- chezmoi templates (*.tmpl) contain {{ }} directives that formatters like
+-- stylua can't parse, so don't format them on save.
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  pattern = "*.tmpl",
+  callback = function() vim.b.autoformat = false end,
+})
