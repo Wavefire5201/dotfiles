@@ -17,6 +17,20 @@ plugins=(git gh docker zsh-syntax-highlighting zsh-autosuggestions zsh-history-s
 fpath+="${ZSH_CUSTOM:-"$ZSH/custom"}/plugins/zsh-completions/src"
 source $ZSH/oh-my-zsh.sh
 
+# history
+# Must come AFTER oh-my-zsh.sh: omz's lib/history.zsh caps SAVEHIST at 10000,
+# which silently truncated history to ~2 months and starved autosuggestions.
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=200000            # entries kept in memory this session
+SAVEHIST=100000            # entries persisted to HISTFILE
+setopt HIST_IGNORE_ALL_DUPS # drop older copy of any duplicated command, not just consecutive
+setopt HIST_SAVE_NO_DUPS    # never write a duplicate to HISTFILE
+setopt HIST_FIND_NO_DUPS    # don't show the same match twice when searching
+setopt HIST_REDUCE_BLANKS   # normalize whitespace so `ls  -l` and `ls -l` are one entry
+# Noise that is faster to retype than to autosuggest. Pattern must match the
+# whole command line; it only filters what gets written, not what already exists.
+HISTORY_IGNORE='(ls|ls *|ll|la|cd|cd ..|..|...|-|pwd|exit|clear|c|reset|history|fg|bg|jobs|btop|htop|ff)'
+
 # zsh-history-substring-search options
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
@@ -31,12 +45,22 @@ export EDITOR="nvim"
 export XDG_CONFIG_HOME="$HOME/.config"
 export ANDROID_HOME="$HOME/Android/Sdk/"
 
+# XDG relocations: keep $HOME free of tool dot-dirs. Each of these is the tool's
+# own documented override, so the existing data was moved, not regenerated.
+export CARGO_HOME="$HOME/.local/share/cargo"
+export RUSTUP_HOME="$HOME/.local/share/rustup"
+export GRADLE_USER_HOME="$HOME/.local/share/gradle"
+export ANDROID_USER_HOME="$HOME/.local/share/android"
+export DOTNET_CLI_HOME="$HOME/.local/share/dotnet"
+export NUGET_PACKAGES="$HOME/.local/share/NuGet/packages"
+export DOCKER_CONFIG="$HOME/.config/docker"
+export npm_config_cache="$HOME/.cache/npm"
+
 # path
 export PATH=$PATH:$HOME/.spicetify
 # adds ~/.local/bin and subfolders to $PATH
 export PATH="$PATH:${$(find ~/.local/bin -maxdepth 1 -type d -printf %p:)%%:}"
-export PATH="$HOME/.npm-global/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$CARGO_HOME/bin:$PATH"
 
 # aliases
 alias cat='bat'
@@ -47,14 +71,27 @@ alias dupdate="docker compose pull && docker compose up -d"
 alias sp="spotify_player"
 alias zj="zellij"
 
-# zj session completion: `zj a <TAB>` completes session names
+# zj session completion: `zj a <TAB>` / `zj d <TAB>` complete session names
 # Registered for zellij too: with complete_aliases off, zsh expands the
 # `zj` alias to `zellij` before completing, so a zj-only compdef never runs.
+_zj_sessions() {
+  # delete-session refuses a running session unless -f/--force, so by default
+  # offer only exited ones. Names are cut at " [Created" so spaces survive.
+  local -a lines
+  lines=(${(f)"$(zellij list-sessions --no-formatting 2>/dev/null)"})
+  [[ $1 == exited ]] && lines=(${(M)lines:#*\(EXITED*})
+  reply=(${lines%% \[Created*})
+}
 _zj_complete() {
-  if [[ ${words[CURRENT-1]} == (a|attach) ]]; then
-    local -a sessions
-    sessions=(${(f)"$(zellij list-sessions --short 2>/dev/null)"})
-    (( $#sessions )) && compadd -a sessions
+  local -a reply
+  if [[ $PREFIX != -* ]]; then
+    case ${words[2]} in
+      (a|attach)         _zj_sessions all ;;
+      (d|delete-session) (( ${words[(I)(-f|--force)]} )) && _zj_sessions all || _zj_sessions exited ;;
+    esac
+  fi
+  if (( CURRENT > 2 && $#reply )); then
+    compadd -a reply
   else
     (( $+functions[_zellij] )) || autoload -Uz _zellij
     _zellij "$@"
@@ -62,6 +99,92 @@ _zj_complete() {
 }
 compdef _zj_complete zj zellij
 alias ud="fd -e zip -x bash -c 'mkdir -p "{.}" && unzip -n -q "{}" -d "{.}"'"
+
+# codex workspaces
+# Each ChatGPT workspace is a separate login with its own quota. The default
+# ~/.codex is "campus"; the others live in $CODEX_WORKSPACE_ROOT/<name>/.codex
+# with config.toml/hooks.json/skills/rules/plugins symlinked back to ~/.codex so
+# every workspace shares one setup while keeping its own sessions and history.
+# Never copy auth.json between homes: OpenAI rotates the refresh token, so two
+# homes sharing one credential invalidate each other.
+export CODEX_WORKSPACE_ROOT="$HOME/.local/share/codex-profiles"
+
+codexw() {
+  emulate -L zsh
+  local ws=$1
+  if (( $# == 0 )); then
+    print -ru2 "usage: codexw <workspace> [codex args...]"
+    print -ru2 "  campus   ->  $HOME/.codex"
+    local d
+    for d in $CODEX_WORKSPACE_ROOT/*(N/); do
+      print -ru2 "  ${d:t}    ->  $d/.codex"
+    done
+    return 2
+  fi
+  shift
+  local home
+  case $ws in
+    (campus|main|default) home=$HOME/.codex ;;
+    (*) home=$CODEX_WORKSPACE_ROOT/$ws/.codex ;;
+  esac
+  if [[ ! -f $home/auth.json ]]; then
+    print -ru2 "codexw: workspace '$ws' has no login yet. Run:"
+    print -ru2 "  CODEX_HOME=$home codex login"
+    return 1
+  fi
+  CODEX_HOME=$home command codex "$@"
+}
+
+_codexw() {
+  if (( CURRENT == 2 )); then
+    local -a ws
+    ws=(campus $CODEX_WORKSPACE_ROOT/*(N/:t))
+    compadd -a ws
+  else
+    (( $+functions[_codex] )) || autoload -Uz _codex
+    _codex "$@"
+  fi
+}
+compdef _codexw codexw
+
+alias cxc='codexw campus'
+alias cxp='codexw power'
+
+# ssh tunnels: `tun 3083 5210` forwards each port to the same port on
+# coguide-dev; `tun 5000-5100` forwards a whole range, `tun 8888:3080` maps
+# local 8888 to remote 3080, and a non-port arg picks another host
+# (`tun davinci 1455`).
+tun() {
+  emulate -L zsh
+  local host=coguide-dev arg p
+  local -a fwd shown
+  for arg in "$@"; do
+    case $arg in
+      (<->)     fwd+=(-L ${arg}:localhost:${arg}); shown+=($arg) ;;
+      (<->:<->) fwd+=(-L ${arg%%:*}:localhost:${arg#*:}); shown+=($arg) ;;
+      (<->-<->)
+        if (( ${arg%%-*} > ${arg#*-} )); then
+          print -ru2 "tun: range '$arg' runs backwards"
+          return 2
+        fi
+        for (( p = ${arg%%-*}; p <= ${arg#*-}; p++ )); do
+          fwd+=(-L ${p}:localhost:${p})
+        done
+        shown+=($arg) ;;
+      # a typo'd port spec would otherwise be taken as the host
+      (<->[-:]*)
+        print -ru2 "tun: bad port spec '$arg'"
+        return 2 ;;
+      (*)       host=$arg ;;
+    esac
+  done
+  if (( ! $#fwd )); then
+    print -ru2 "usage: tun [host] <port|lo-hi|local:remote>...   (host defaults to coguide-dev)"
+    return 2
+  fi
+  print -ru2 "tun: ${(j:, :)shown} -> $host  (Ctrl+C to close)"
+  ssh -N -o ExitOnForwardFailure=yes $fwd $host
+}
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -105,3 +228,6 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # Supabase access token: loaded from the canonical secret file (mode 600) so
 # Claude Code and Codex can pick it up via $SUPABASE_ACCESS_TOKEN.
 export SUPABASE_ACCESS_TOKEN="$(cat ~/.config/supabase/access-token 2>/dev/null)"
+
+# Machine-local, untracked additions.
+[[ -r ~/.config/zsh/local.zsh ]] && source ~/.config/zsh/local.zsh
